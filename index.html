@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olivia Ahn</title>
+<meta name="description" content="Olivia Ahn — Computer Engineering portfolio for internship and university-transfer applications.">
+<style>
+  :root {
+    --bg: #F1F3F1;
+    --surface: #FFFFFF;
+    --surface-2: #E9EDEB;
+    --ink: #121A1D;
+    --ink-soft: #4C5A5C;
+    --ink-faint: #7C8A8A;
+    --line: #D6DEDA;
+    --accent: #17827A;
+    --accent-ink: #FFFFFF;
+    --accent-warm: #B96A2E;
+    --shadow: 0 1px 2px rgba(18, 26, 29, 0.04), 0 8px 24px -12px rgba(18, 26, 29, 0.18);
+    --radius: 3px;
+    --maxw: 780px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D1315;
+      --surface: #151D1F;
+      --surface-2: #1B2426;
+      --ink: #E9EFEE;
+      --ink-soft: #A9B7B6;
+      --ink-faint: #718080;
+      --line: #263030;
+      --accent: #3FD4C6;
+      --accent-ink: #06201D;
+      --accent-warm: #E2934F;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 30px -12px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0D1315;
+    --surface: #151D1F;
+    --surface-2: #1B2426;
+    --ink: #E9EFEE;
+    --ink-soft: #A9B7B6;
+    --ink-faint: #718080;
+    --line: #263030;
+    --accent: #3FD4C6;
+    --accent-ink: #06201D;
+    --accent-warm: #E2934F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 30px -12px rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Overpass", -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono {
+    font-family: "Overpass Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  h1, h2, h3 {
+    font-family: "Overpass", sans-serif;
+    font-weight: 700;
+    line-height: 1.15;
+    text-wrap: balance;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  p { margin: 0; }
+
+  a { color: inherit; }
+
+  .eyebrow {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 0.9rem;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.5rem;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .name {
+    font-family: "Overpass Mono", monospace;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .topbar .name .dot { color: var(--accent); }
+  .topbar nav {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .topbar nav::-webkit-scrollbar { display: none; }
+  .topbar nav a {
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .topbar nav a:hover, .topbar nav a.active {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+
+  /* ---------- Trace rail (decorative, desktop only) ---------- */
+  .trace-rail {
+    position: fixed;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  @media (min-width: 1180px) {
+    .trace-rail { display: flex; }
+  }
+  .trace-rail .seg {
+    width: 1px;
+    height: 46px;
+    background: var(--line);
+  }
+  .trace-rail .node {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--ink-faint);
+    background: var(--bg);
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+  .trace-rail .node.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: scale(1.3);
+  }
+
+  /* ---------- Layout helpers ---------- */
+  section {
+    padding: 5.5rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .wrap-wide {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 6.5rem 1.5rem 5rem;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (max-width: 800px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-canvas-wrap { order: -1; }
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 4.6vw, 3.2rem);
+    margin-bottom: 1.3rem;
+  }
+  .hero .lede {
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    max-width: 54ch;
+    margin-bottom: 2rem;
+  }
+  .hero .lede strong { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.72rem 1.3rem;
+    border-radius: var(--radius);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-ghost {
+    border-color: var(--line);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover { border-color: var(--accent); }
+
+  .hero-canvas-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 320px;
+    margin: 0 auto;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
+  }
+  #orbit-canvas { width: 100%; height: 100%; display: block; }
+
+  /* ---------- Section heading block ---------- */
+  .sec-head { margin-bottom: 2.6rem; }
+  .sec-head h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .sec-head .sub {
+    color: var(--ink-soft);
+    margin-top: 0.6rem;
+    max-width: 60ch;
+  }
+
+  /* ---------- About ---------- */
+  .about-body p { margin-bottom: 1.1rem; color: var(--ink-soft); }
+  .about-body strong { color: var(--ink); font-weight: 600; }
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .interests li {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.03em;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-soft);
+  }
+  .callout {
+    margin-top: 2.2rem;
+    padding: 1.4rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent-warm);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .callout .callout-label {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .callout p { color: var(--ink-soft); }
+
+  /* ---------- Flagship cards ---------- */
+  .flagship-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2.2rem;
+    margin-bottom: 2rem;
+  }
+  .flagship-card:last-child { margin-bottom: 0; }
+  .card-label {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.9rem;
+  }
+  .flagship-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.1rem;
+  }
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin: 1.3rem 0 1.5rem;
+    padding: 1rem 0;
+    border-top: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 100px;
+  }
+  .stat .num {
+    font-family: "Overpass Mono", monospace;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--accent);
+  }
+  .stat .label {
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+  }
+  .flagship-card p { color: var(--ink-soft); margin-bottom: 0.95rem; }
+  .flagship-card p:last-child { margin-bottom: 0; }
+  .flagship-card p strong { color: var(--ink); font-weight: 600; }
+  .note-line {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ink-faint);
+    padding-top: 0.3rem;
+  }
+
+  /* ---------- Timeline ---------- */
+  .tl {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .tl::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--line);
+  }
+  .tl-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 0.35rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--ink-faint);
+  }
+  .tl-item.is-flagship::before {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .tl-item .tl-when {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.76rem;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+  .tl-item h4 {
+    font-family: "Overpass", sans-serif;
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+  .tl-item p {
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+    max-width: 62ch;
+  }
+  .tl-item .flag-tag {
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.66rem;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.08rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- Product & design ---------- */
+  .pd-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.9rem 2rem;
+    margin-bottom: 1.3rem;
+  }
+  .pd-card:last-child { margin-bottom: 0; }
+  .pd-card h3 { font-size: 1.15rem; margin-bottom: 0.8rem; }
+  .pd-card p { color: var(--ink-soft); margin-bottom: 0.9rem; }
+  .pd-card p:last-of-type { margin-bottom: 0; }
+  .pd-intro {
+    color: var(--ink-soft);
+    margin-bottom: 2rem;
+    max-width: 62ch;
+  }
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+    font-family: "Overpass Mono", monospace;
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .link-btn:hover { border-color: var(--accent); }
+
+  /* ---------- Contact ---------- */
+  .contact-wrap {
+    text-align: left;
+  }
+  .contact-wrap h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin-bottom: 1rem; }
+  .contact-wrap .sub { color: var(--ink-soft); max-width: 55ch; margin-bottom: 2rem; }
+
+  footer {
+    padding: 2.5rem 1.5rem 3.5rem;
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+  footer .fname {
+    font-family: "Overpass Mono", monospace;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800&family=Overpass+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+  <span class="name">Olivia Ahn<span class="dot">.</span></span>
+  <nav aria-label="Section navigation">
+    <a href="#about">About</a>
+    <a href="#flagship">Work</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#product">Product &amp; Design</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<nav class="trace-rail" aria-hidden="true">
+  <div class="node active" data-for="hero"></div>
+  <div class="seg"></div>
+  <div class="node" data-for="about"></div>
+  <div class="seg"></div>
+  <div class="node" data-for="flagship"></div>
+  <div class="seg"></div>
+  <div class="node" data-for="timeline"></div>
+  <div class="seg"></div>
+  <div class="node" data-for="product"></div>
+  <div class="seg"></div>
+  <div class="node" data-for="contact"></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Computer Engineering &middot; Michigan State University</div>
+      <h1>I build things to understand how they work.</h1>
+      <p class="lede">
+        Six years of taking apart problems most people leave alone &mdash; a
+        <strong>robot arm</strong> for exhausted nurses at fourteen, a
+        <strong>genetic algorithm</strong> predicting shark evolution at seventeen,
+        a <strong>wearable medical device</strong> that took first place with a
+        twelve-person team. Now studying Computer Engineering and looking for the
+        next problem worth that kind of attention.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#flagship">See the work</a>
+        <a class="btn btn-ghost" href="mailto:ahnolivi@msu.edu">Email me</a>
+      </div>
+    </div>
+    <div class="hero-canvas-wrap">
+      <canvas id="orbit-canvas" aria-hidden="true"></canvas>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">&sect;01 &mdash; About</div>
+      <h2>Why computer engineering</h2>
+    </div>
+    <div class="about-body reveal">
+      <p>
+        I grew up between the United States and Korea and think comfortably in
+        both languages. I chose <strong>Computer Engineering over Computer
+        Science</strong> on purpose: if AI eventually writes most of the code
+        itself, the harder and more interesting problem left is building the
+        physical layer humans and AI systems use to talk to each other &mdash;
+        sensors, actuators, interfaces. That's the throughline connecting a
+        pandemic-era robot arm to a wearable biosensor built years later, and
+        it's why I've been circling optics lately as the next place that
+        problem shows up.
+      </p>
+      <p>
+        I'm currently a first-year at Michigan State University, and I'm
+        looking to transfer into a program with deeper research
+        infrastructure in robotics and embedded systems. Outside of coursework,
+        I've tutored math and English, taught myself whatever a project
+        needed that I didn't already know, and generally preferred building
+        the thing over reading about it.
+      </p>
+      <ul class="interests">
+        <li>ROBOTICS</li>
+        <li>EMBEDDED SYSTEMS</li>
+        <li>AI / AUTONOMOUS SYSTEMS</li>
+        <li>OPTICS</li>
+        <li>ALGORITHMS &amp; SIMULATION</li>
+      </ul>
+      <div class="callout">
+        <span class="callout-label">A note on how I think</span>
+        <p>
+          The year I prepped for Korea's college entrance exam (the CSAT), I
+          made a rule: no phone, no internet searches, during any study
+          session. No instant answers &mdash; just textbooks and re-deriving
+          things until a pattern clicked. One calculus problem took me over
+          thirty minutes, and that was the point. It taught me that depth
+          beats speed and that a good question is often worth more than a
+          quick answer &mdash; an idea that later became the actual design
+          brief behind Edu Pointer (see Product &amp; Design below), and
+          shapes how I still approach a new problem.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="flagship">
+  <div class="wrap-wide">
+    <div class="sec-head reveal">
+      <div class="eyebrow">&sect;02 &mdash; Flagship Projects</div>
+      <h2>Three problems I went too deep on</h2>
+      <p class="sub">The ones with the most engineering underneath them &mdash; algorithms, hardware, and simulation, in that order.</p>
+    </div>
+
+    <article class="flagship-card reveal">
+      <div class="card-label">In-school research program &middot; Selected as outstanding work &middot; with 박선형 &amp; 박지유</div>
+      <h3>Predicting Shark Evolution with a Genetic Algorithm</h3>
+      <div class="stat-row">
+        <div class="stat"><span class="num">15</span><span class="label">ecomorphotypes classified</span></div>
+        <div class="stat"><span class="num">~80</span><span class="label">page final report</span></div>
+        <div class="stat"><span class="num">3</span><span class="label">future-ocean scenarios modeled</span></div>
+      </div>
+      <p>
+        Ocean ecosystems are changing under climate change at least as fast as
+        land ecosystems, but they're studied far less &mdash; mostly because
+        they're so much harder to observe directly. We picked sharks as a
+        tractable way in: a predator that sits in food chains across almost
+        every marine environment.
+      </p>
+      <p>
+        We classified sharks into <strong>15 ecomorphotypes</strong> by
+        habitat, fin structure, tooth shape, and diet, then wrote a genetic
+        algorithm &mdash; diversity, heredity, selection, reproduction,
+        crossover, mutation &mdash; that evolves a population of
+        <span class="mono">shark_survivor</span> objects. Size, speed, and
+        fertility are inherited from surviving parents with random mutation;
+        objects die on predator collision and gain fitness from feeding.
+      </p>
+      <p>
+        Under abundant, fast prey, the simulation converged on smaller,
+        slower sharks &mdash; a predator-avoidance body plan. Under scarce,
+        slow prey, it converged on longer sharks that circle in place while
+        feeding, similar to a whale shark's oversized mouth. We then fed in
+        projected ocean acidification, warming, and microplastic scenarios,
+        and the model predicted a shift toward that second, feeding-optimized
+        body type as prey grows scarcer.
+      </p>
+      <p class="note-line">This started as a standard in-school research assignment that didn't really call for this much rigor &mdash; we just kept going.</p>
+    </article>
+
+    <article class="flagship-card reveal">
+      <div class="card-label">WATSON Biomedical Engineering Club &middot; Co-president, 12-person team &middot; 1st place, club research festival</div>
+      <h3>A Wearable That Reads Heart Rate, Muscle Signal, and Temperature</h3>
+      <div class="stat-row">
+        <div class="stat"><span class="num">3</span><span class="label">sensor types fused</span></div>
+        <div class="stat"><span class="num">12</span><span class="label">person team, co-led</span></div>
+        <div class="stat"><span class="num">1st</span><span class="label">place, academic festival</span></div>
+      </div>
+      <p>
+        As co-president of WATSON, our school's biomedical engineering club, I
+        helped build a wearable combining a <strong>PPG heart-rate sensor</strong>
+        (AD8232), an <strong>EMG muscle-signal sensor</strong>, and a
+        <strong>TMP36 temperature sensor</strong> &mdash; all read through
+        Arduino and flagged as normal or abnormal on green/red LEDs and an
+        LCD readout.
+      </p>
+      <p>
+        I designed and 3D-printed the arm-worn enclosure in Fusion 360 using
+        FDM printing, splitting it into two halves so it clips onto the
+        forearm without a fastener. We then presented the device alongside
+        LEADERS, the school's business club, in a joint forum &mdash; not
+        just demoing it as a working prototype, but arguing through how it
+        could actually be positioned and sold.
+      </p>
+      <p>The project won first place at the club's own academic festival.</p>
+    </article>
+
+    <article class="flagship-card reveal">
+      <div class="card-label">전산물리학 ET &middot; School academic festival &middot; with 조신우</div>
+      <h3>Why the Night Sky Has More Couples Than Singles</h3>
+      <div class="stat-row">
+        <div class="stat"><span class="num">101</span><span class="label">stars catalogued</span></div>
+        <div class="stat"><span class="num">43%</span><span class="label">are binary systems</span></div>
+        <div class="stat"><span class="num">38%</span><span class="label">are single-star systems</span></div>
+      </div>
+      <p>
+        We catalogued 101 stars across 25+ winter constellations by how many
+        stars share their system &mdash; single, binary, or higher multiples
+        &mdash; and found single-star systems are actually the minority:
+        about 38% single versus 43% binary and 19% triple-or-more.
+      </p>
+      <p>
+        Then we explained the pattern with physics instead of just leaving it
+        as a statistic. Using Python (VPython), we built n-body gravity
+        simulations of single, binary, and triple-star systems, tracking
+        kinetic, potential, and mechanical energy to confirm conservation and
+        show that triple-plus systems are dynamically unstable unless their
+        mass ratios are almost exactly balanced &mdash; which is why they're
+        so much rarer. We traced the pattern back to star formation itself:
+        an early collapsing gas cloud rarely settles into one single point,
+        which favors binaries from the start.
+      </p>
+      <p>We presented it as a two-part school festival talk, with a fair amount of "why are there more couples than singles up there" framing that our audience found funnier than we expected.</p>
+    </article>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">&sect;03 &mdash; Timeline</div>
+      <h2>How I got from there to here</h2>
+      <p class="sub">Everything above, plus the smaller projects and the year I deliberately didn't build anything at all.</p>
+    </div>
+
+    <div class="tl reveal">
+      <div class="tl-item is-flagship">
+        <span class="tl-when">Age 14</span>
+        <h4>Robot Arm for Contactless COVID Testing</h4>
+        <p>Watched nurses' faces break out from wearing PPE for entire shifts during PCR testing and tried to build a pneumatic robot arm to do the job instead &mdash; iterating gripper design and material until it could lift 100&times; its original capacity.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">Age 15</span>
+        <h4>Noise-Detecting Etiquette Lamp</h4>
+        <p>An Arduino sound sensor built into a repurposed candle holder, made to show sound the way a clock shows time &mdash; submitted to an invention contest.</p>
+      </div>
+      <div class="tl-item is-flagship">
+        <span class="tl-when">High school &middot; Age 16</span>
+        <h4>Star System Simulation<span class="flag-tag">Flagship</span></h4>
+        <p>N-body gravity simulations and a constellation survey explaining why binary star systems outnumber single ones. Detailed above.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">High school &middot; Age 16</span>
+        <h4>Classroom Seat-Assignment Program</h4>
+        <p>A Python script that reshuffled 36 seats each round without repeating anyone's front, back, or side seat twice in a row &mdash; written after gaining enough confidence in Python to fix a real complaint.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">High school</span>
+        <h4>Roller Coaster Fear Research</h4>
+        <p>An informal project with friends: a VR experiment on why some seats feel scarier than others, backed by the physics of why the back row hits top speed first off the initial drop.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">High school &middot; Age 17</span>
+        <h4>Molecules Club</h4>
+        <p>Learned to analyze molecular structure at the atomic scale using ORCA and Avogadro.</p>
+      </div>
+      <div class="tl-item is-flagship">
+        <span class="tl-when">High school &middot; Age 17</span>
+        <h4>Shark Evolution Genetic Algorithm<span class="flag-tag">Flagship</span></h4>
+        <p>An 80-page research program modeling shark evolution under future ocean conditions. Detailed above.</p>
+      </div>
+      <div class="tl-item is-flagship">
+        <span class="tl-when">High school &middot; Age 17</span>
+        <h4>WATSON Wearable Device<span class="flag-tag">Flagship</span></h4>
+        <p>A sensor-fused wearable built and co-led with a 12-person biomedical engineering club team. Detailed above.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">Age 18</span>
+        <h4>Focused Entirely on the College Entrance Exam</h4>
+        <p>No side projects this year &mdash; by design, not by accident.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">2025 &middot; Age 19</span>
+        <h4>Gap Year, Digital Detox, and Edu Pointer</h4>
+        <p>Prepped for the CSAT without a phone, then joined Edu Pointer, a math app built around the same idea &mdash; make students think before handing them the answer. See Product &amp; Design.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">2026 &middot; Age 20</span>
+        <h4>Daechi Wasong Academy Website</h4>
+        <p>Designed a multi-page site for a CSAT-retake academy in Seoul, live at daechiwasong.com. See Product &amp; Design.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">2026</span>
+        <h4>Started Computer Engineering at Michigan State University</h4>
+        <p>Currently a first-year, and looking ahead to a transfer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="product">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">&sect;04 &mdash; Product &amp; Design</div>
+      <h2>Where I wasn't the engineer</h2>
+    </div>
+    <p class="pd-intro reveal">
+      Not everything here involved me writing the code. These two were about
+      understanding a user, or making something look and function right &mdash;
+      different skills, worth showing separately rather than blurring into
+      the engineering work above.
+    </p>
+
+    <div class="pd-card reveal">
+      <div class="card-label">Math education app &middot; Core team member, product &middot; Sept 2025&ndash;</div>
+      <h3>Edu Pointer</h3>
+      <p>
+        During my CSAT gap year I studied without a phone, which meant no
+        instant answers &mdash; just textbooks and re-derivation until a
+        pattern clicked. That experience became the design brief for Edu
+        Pointer: instead of revealing a full worked solution, it breaks a
+        problem into steps, checks understanding at each one, and only offers
+        a guiding question if you're stuck.
+      </p>
+      <p>
+        I used the app myself as an actual test-taker preparing for the exam,
+        and most of its features exist because I asked for them from that
+        seat &mdash; the engineering team built what I specified, not what I
+        coded.
+      </p>
+    </div>
+
+    <div class="pd-card reveal">
+      <div class="card-label">Academy website &middot; Design</div>
+      <h3>Daechi Wasong Academy</h3>
+      <p>
+        A part-time design project for a CSAT-retake academy (재수학원) in
+        Daechi, Seoul. It's built on an academy website platform rather than
+        hand-coded, so the director can keep it updated without me &mdash;
+        but the layout, visual identity, and most of the page content were
+        mine, across a homepage, faculty profiles, an admissions section, and
+        a Q&amp;A board, responsive from phone to desktop.
+      </p>
+      <a class="link-btn" href="http://www.daechiwasong.com/main/main.html" target="_blank" rel="noopener">View site &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-wrap reveal">
+    <div class="eyebrow">&sect;05 &mdash; Contact</div>
+    <h2>Let's talk.</h2>
+    <p class="sub">Open to internship conversations, transfer-application questions, or just talking through a robotics idea.</p>
+    <a class="btn btn-primary" href="mailto:ahnolivi@msu.edu">ahnolivi@msu.edu</a>
+  </div>
+</section>
+
+<footer>
+  <p class="fname">Olivia Ahn</p>
+  <p>Computer Engineering &middot; Michigan State University</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Reveal on scroll */
+  var revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("in-view"); });
+  }
+
+  /* Trace rail active-section sync */
+  var sections = ["hero", "about", "flagship", "timeline", "product", "contact"];
+  var nodes = {};
+  document.querySelectorAll(".trace-rail .node").forEach(function (n) {
+    nodes[n.getAttribute("data-for")] = n;
+  });
+  var navLinks = document.querySelectorAll(".topbar nav a");
+
+  function setActive(id) {
+    Object.keys(nodes).forEach(function (key) {
+      nodes[key].classList.toggle("active", key === id);
+    });
+    navLinks.forEach(function (a) {
+      var match = a.getAttribute("href") === "#" + id;
+      a.classList.toggle("active", match);
+    });
+  }
+
+  if ("IntersectionObserver" in window) {
+    var secObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { threshold: 0.5 });
+    sections.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) secObserver.observe(el);
+    });
+  }
+
+  /* Decorative orbit canvas in hero */
+  var canvas = document.getElementById("orbit-canvas");
+  if (canvas && canvas.getContext) {
+    var ctx = canvas.getContext("2d");
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var size = 0;
+
+    function resize() {
+      size = canvas.clientWidth;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    var styles = getComputedStyle(document.documentElement);
+    function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+    var bodies = [
+      { r: size * 0.0, radius: 0, speed: 0, size: 5, isCenter: true },
+      { rFactor: 0.30, speed: 0.9, size: 3.4, phase: 0 },
+      { rFactor: 0.42, speed: 0.6, size: 2.6, phase: 2.1 },
+      { rFactor: 0.47, speed: 0.62, size: 2.2, phase: 2.6 }
+    ];
+
+    var t = 0;
+    function draw() {
+      var cx = size / 2, cy = size / 2;
+      var accent = cssVar("--accent") || "#17827A";
+      var line = cssVar("--line") || "#D6DEDA";
+      var inkFaint = cssVar("--ink-faint") || "#7C8A8A";
+
+      ctx.clearRect(0, 0, size, size);
+
+      bodies.forEach(function (b) {
+        if (b.isCenter) return;
+        ctx.beginPath();
+        ctx.arc(cx, cy, size * b.rFactor, 0, Math.PI * 2);
+        ctx.strokeStyle = line;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+      ctx.fillStyle = accent;
+      ctx.fill();
+
+      bodies.forEach(function (b) {
+        if (b.isCenter) return;
+        var angle = t * b.speed + b.phase;
+        var x = cx + Math.cos(angle) * size * b.rFactor;
+        var y = cy + Math.sin(angle) * size * b.rFactor * 0.94;
+        ctx.beginPath();
+        ctx.arc(x, y, b.size, 0, Math.PI * 2);
+        ctx.fillStyle = inkFaint;
+        ctx.fill();
+      });
+
+      if (!reduceMotion) {
+        t += 0.006;
+        requestAnimationFrame(draw);
+      }
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    draw();
+  }
+})();
+</script>
+</body>
+</html>
