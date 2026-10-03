@@ -1,1987 +1,2075 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f5f3ec">
-<meta name="description" content="Olivia Ahn — Computer Engineering at Michigan State University. A field notebook of physical systems, evolutionary simulations, and questions worth building for.">
-<title>Olivia Ahn — Engineering Field Notes</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23f5f3ec'/%3E%3Cpath d='M5 23h8l4-12 6 21 4-9h8' fill='none' stroke='%230c625b' stroke-width='3'/%3E%3C/svg%3E">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Olivia Ahn">
+<meta property="og:description" content="Computer Engineering at Michigan State. Robotics, sensors and simulations you can try in the browser.">
+<title>Olivia Ahn</title>
+<meta name="description" content="Olivia Ahn, Computer Engineering at Michigan State University. Robotics, sensors, and simulations you can try in the browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --paper:#f5f3ec;
-  --ink:#242d2b;
-  --muted:#5e6964;
-  --teal:#0c625b;
-  --teal-pale:#e2e9df;
-  --orange:#aa4b28;
-  --line:#cbd0c5;
-  --white:#fffdf7;
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:'Segoe UI',Arial,sans-serif;
-  --mono:Consolas,'Courier New',monospace;
-  --max:1280px;
-}
-* {
-  box-sizing:border-box;
-}
-html {
-  scroll-behavior:auto;
-  scroll-padding-top:100px;
-}
-body {
-  margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:var(--sans);
-  font-size:16px;
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-}
-::selection {
-  background:#c2dcd0;
-  color:#173c33;
-}
-h1,h2,h3,h4,p,figure {
-  margin:0;
-}
-h1,h2,h3 {
-  font-weight:400;
-  line-height:1.08;
-  text-wrap:balance;
-}
-h1,h2,h3,.editorial {
-  font-family:var(--serif);
-}
-a {
-  color:inherit;
-  text-underline-offset:5px;
-}
-button,input {
-  font:inherit;
-}
-button {
-  color:inherit;
-  cursor:pointer;
-}
-button,a,summary,input {
-  -webkit-tap-highlight-color:transparent;
-}
-button {
-  border-radius:0;
-}
-a:hover {
-  color:var(--teal);
-}
-:focus-visible {
-  outline:3px solid var(--orange);
-  outline-offset:5px;
-}
-button:disabled {
-  cursor:default;
-}
-svg {
-  display:block;
-  max-width:100%;
-  height:auto;
-}
-button svg {
-  width:18px;
-}
-button:focus-visible,input:focus-visible {
-  outline-offset:4px;
-}
-summary {
-  cursor:pointer;
-  list-style:none;
-}
-summary::-webkit-details-marker {
-  display:none;
-}
-summary::marker {
-  content:'';
-}
-section,article[id] {
-  scroll-margin-top:16px;
-}
-.shell {
-  width:min(var(--max),calc(100% - 112px));
-  margin-inline:auto;
-}
-.eyebrow,.mono,.micro,.project-index,.log-date,.text-link,.tags,.tab-button {
-  font-family:var(--mono);
-}
-.eyebrow {
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.11em;
-  line-height:1.6;
-}
-.micro {
-  font-size:11px;
-  line-height:1.5;
-}
-.muted {
-  color:var(--muted);
-}
-.teal {
-  color:var(--teal);
-}
-.orange {
-  color:var(--orange);
-}
-.sr-only {
-  position:absolute;
-  width:1px;
-  height:1px;
-  padding:0;
-  margin:-1px;
-  overflow:hidden;
-  clip-path:inset(50%);
-  white-space:nowrap;
-  border:0;
-}
-.skip-link {
-  position:fixed;
-  left:20px;
-  top:-100px;
-  z-index:100;
-  padding:12px 20px;
-  background:var(--ink);
-  color:white;
-}
-.skip-link:focus {
-  top:12px;
-}
-.text-link {
-  display:inline-flex;
-  align-items:center;
-  gap:20px;
-  text-decoration:none;
-  font-size:12px;
-  padding:12px 0;
-  border-bottom:1px solid currentColor;
-}
-.text-link span:last-child {
-  font-size:21px;
-  line-height:1;
-}
-.section-top {
-  display:grid;
-  grid-template-columns:1fr 3fr;
-  gap:32px;
-  align-items:start;
-  margin-bottom:50px;
-}
-.section-top h2 {
-  font-size:clamp(34px,4vw,54px);
-}
-.section-top .eyebrow {
-  padding-top:8px;
-}
-.section-top p {
-  max-width:550px;
-  color:var(--muted);
-  margin-top:18px;
-}
-.credits {
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.7;
-}
-.credits strong {
-  font-weight:600;
-  color:var(--ink);
-}
-/* The page is a notebook: rules, generous margins, and a few ink colors. */
-.topbar {
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:var(--paper);
-  border-bottom:1px solid var(--line);
-}
-.header-inner {
-  min-height:80px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:28px;
-}
-.wordmark {
-  display:flex;
-  align-items:center;
-  gap:13px;
-  font-size:16px;
-  font-weight:600;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.mark {
-  width:31px;
-  height:31px;
-  color:var(--teal);
-}
-.wordmark small {
-  font-family:var(--mono);
-  font-size:10px;
-  font-weight:400;
-  color:var(--muted);
-  padding-left:16px;
-  border-left:1px solid var(--line);
-}
-.nav {
-  display:flex;
-  align-items:center;
-  gap:27px;
-}
-.nav a {
-  font-size:12px;
-  text-decoration:none;
-  padding:10px 0;
-}
-.nav a:last-child {
-  border-bottom:1px solid var(--ink);
-}
-.menu-toggle {
-  display:none;
-  background:none;
-  border:1px solid var(--line);
-  padding:9px 13px;
-  font-size:12px;
-}
-.hero {
-  padding:72px 0 0;
-}
-.hero-kicker {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:30px;
-}
-.status-dot {
-  width:6px;
-  height:6px;
-  background:var(--orange);
-  border-radius:50%;
-  flex-shrink:0;
-}
-.hero-grid {
-  display:grid;
-  grid-template-columns:1.18fr 1fr;
-  gap:7%;
-  align-items:center;
-}
-.hero h1 {
-  font-size:clamp(48px,5.6vw,82px);
-  letter-spacing:-.055em;
-  line-height:1.06;
-}
-.hero h1 em {
-  font-weight:400;
-  color:var(--teal);
-}
-.hero-intro {
-  max-width:480px;
-  font-size:17px;
-  line-height:1.75;
-  margin-top:27px;
-  color:var(--muted);
-}
-.hero-intro strong {
-  font-weight:600;
-  color:var(--ink);
-}
-.hero-actions {
-  display:flex;
-  gap:30px;
-  align-items:center;
-  margin-top:30px;
-}
-.hero-actions .primary-link {
-  background:var(--ink);
-  color:var(--paper);
-  padding:13px 20px;
-  border:1px solid var(--ink);
-}
-.hero-actions .primary-link:hover {
-  background:var(--teal);
-}
-.hero-foot {
-  margin-top:66px;
-  border-top:1px solid var(--line);
-  padding:18px 0 21px;
-  display:flex;
-  justify-content:space-between;
-  gap:24px;
-  color:var(--muted);
-}
-.hero-foot p:first-child {
-  max-width:650px;
-}
-.hero-foot .index-ref {
-  white-space:nowrap;
-}
-.signal-notebook {
-  position:relative;
-  border:1px solid #b8c6b9;
-  background:#ebeee4;
-  transform:rotate(1deg);
-  box-shadow:7px 7px 0 #e5e5db;
-}
-.instrument-head {
-  display:flex;
-  justify-content:space-between;
-  padding:17px 20px;
-  border-bottom:1px solid #c5cfc2;
-  color:var(--teal);
-}
-.signal-figure {
-  position:relative;
-  padding:20px 20px 12px;
-  background-image:linear-gradient(#47796310 1px,transparent 1px),linear-gradient(90deg,#47796310 1px,transparent 1px);
-  background-size:24px 24px;
-}
-.signal-diagram {
-  width:100%;
-  margin-bottom:12px;
-}
-.signal-diagram text {
-  font:10px var(--mono);
-  fill:#52685a;
-}
-.wave-box {
-  padding-top:14px;
-  border-top:1px dashed #a9bdae;
-}
-.wave-box svg {
-  width:100%;
-  aspect-ratio:420/98;
-}
-.signal-controls {
-  padding:14px 18px 17px;
-  background:#f1f2e9;
-  border-top:1px solid #c5cfc2;
-}
-.channel-list {
-  display:flex;
-  gap:5px;
-}
-.tab-button {
-  background:transparent;
-  border:1px solid transparent;
-  padding:9px 11px;
-  font-size:11px;
-  min-height:40px;
-  line-height:1.3;
-}
-.tab-button:hover {
-  border-color:var(--teal);
-}
-.tab-button[aria-pressed="true"] {
-  background:var(--teal);
-  color:#fffdf7;
-}
-.signal-caption {
-  min-height:42px;
-  margin-top:12px;
-  color:#435b4d;
-  font-size:12px;
-  line-height:1.5;
-}
-.instrument-foot {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:11px;
-  color:#5b675e;
-}
-.field-scribble {
-  position:absolute;
-  right:12px;
-  top:-34px;
-  transform:rotate(-5deg);
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:17px;
-  color:var(--orange);
-}
-.range-row {
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-top:14px;
-  font-family:var(--mono);
-  font-size:11px;
-}
-.range-row label {
-  flex-shrink:0;
-}
-.range-row input {
-  width:100%;
-  min-width:0;
-  accent-color:var(--teal);
-  height:28px;
-}
-.range-row output {
-  min-width:36px;
-  text-align:right;
-}
-/* Project 01: a population study, on green graph paper. */
-.work {
-  padding-top:100px;
-}
-.project {
-  padding-bottom:85px;
-}
-.project-topline {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-top:1px solid var(--ink);
-  padding-top:20px;
-  margin-bottom:33px;
-}
-.project-index {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:32px;
-  height:32px;
-  border:1px solid currentColor;
-  border-radius:50%;
-  font-size:12px;
-}
-.project-topline .eyebrow {
-  flex:1;
-}
-.project-topline .project-type {
-  color:var(--muted);
-}
-.project-heading {
-  display:grid;
-  grid-template-columns:1.3fr 1fr;
-  gap:9%;
-  margin-bottom:35px;
-  align-items:end;
-}
-.project-heading h3 {
-  font-size:clamp(36px,4.6vw,64px);
-  letter-spacing:-.04em;
-}
-.project-heading p {
-  font-size:15px;
-  line-height:1.8;
-  color:var(--muted);
-}
-.evolution-board {
-  background:#e1e9dd;
-  border:1px solid #b5c6b3;
-  padding:26px 30px;
-  display:grid;
-  grid-template-columns:1.8fr 1fr;
-  gap:34px;
-}
-.population-header {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  color:#3b5d45;
-}
-.population-svg {
-  width:100%;
-  margin-top:6px;
-  aspect-ratio:650/245;
-}
-.evolution-readout {
-  border-left:1px solid #a7bda6;
-  padding-left:30px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.evolution-readout .channel-list {
-  flex-direction:column;
-  align-items:start;
-  margin:15px 0;
-}
-.evolution-readout .tab-button {
-  padding:10px 12px;
-  text-align:left;
-  border:1px solid #91aa92;
-  width:100%;
-  font-size:11px;
-}
-.evolution-readout p {
-  font-family:var(--serif);
-  font-size:22px;
-  line-height:1.35;
-  margin:2px 0 10px;
-}
-.chart-note {
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  color:#415e48;
-  font-size:11px;
-  font-family:var(--mono);
-}
-.stats {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  border-bottom:1px solid var(--line);
-  padding:23px 0;
-  margin-bottom:25px;
-}
-.stat {
-  display:flex;
-  align-items:baseline;
-  gap:13px;
-}
-.stat strong {
-  font-family:var(--serif);
-  font-size:42px;
-  font-weight:400;
-  letter-spacing:-.05em;
-  color:var(--teal);
-}
-.stat span {
-  font-size:11px;
-  color:var(--muted);
-  max-width:115px;
-  line-height:1.45;
-}
-.project-bottom {
-  display:grid;
-  grid-template-columns:1fr 2fr;
-  gap:50px;
-}
-.process {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
-}
-.process h4 {
-  font-family:var(--mono);
-  font-size:11px;
-  font-weight:400;
-  margin-bottom:8px;
-  color:var(--teal);
-}
-.process p {
-  font-size:13px;
-  line-height:1.7;
-  color:var(--muted);
-}
-.research-notes {
-  margin-top:28px;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-.research-notes summary {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  min-height:57px;
-  font-family:var(--mono);
-  font-size:12px;
-  padding:12px 0;
-  gap:20px;
-}
-.research-notes summary:hover {
-  color:var(--teal);
-}
-.disclosure {
-  font-size:22px;
-  font-family:var(--mono);
-  font-weight:400;
-  transition:transform .18s;
-}
-details[open]>summary .disclosure {
-  transform:rotate(45deg);
-}
-.notes-body {
-  padding:5px 0 30px;
-  max-width:780px;
-  margin-left:auto;
-}
-.notes-body p {
-  font-size:14px;
-  color:var(--muted);
-  margin-top:17px;
-  line-height:1.85;
-}
-.notes-body p:first-child {
-  margin-top:0;
-}
-.notes-body .note-line {
-  font-family:var(--serif);
-  font-style:italic;
-  color:var(--orange);
-  font-size:18px;
-}
-.notes-body strong {
-  color:var(--ink);
-}
-/* Project 02: a signal path through a wearable. */
-.wearable-grid {
-  display:grid;
-  grid-template-columns:.9fr 1.3fr;
-  gap:6%;
-  align-items:start;
-}
-.wearable-copy h3 {
-  font-size:clamp(38px,4.4vw,61px);
-  letter-spacing:-.045em;
-  margin-bottom:25px;
-}
-.wearable-copy>p {
-  font-size:15px;
-  color:var(--muted);
-  line-height:1.8;
-}
-.small-stats {
-  display:flex;
-  gap:32px;
-  margin:28px 0;
-}
-.small-stats .stat {
-  display:block;
-}
-.small-stats .stat strong {
-  display:block;
-  color:var(--orange);
-  font-size:38px;
-}
-.small-stats .stat span {
-  display:block;
-}
-.circuit-board {
-  padding:23px;
-  background:var(--white);
-  border:1px solid var(--line);
-}
-.circuit-board .eyebrow {
-  color:var(--orange);
-}
-.circuit-board svg {
-  width:100%;
-  margin:25px 0;
-}
-.circuit-board text {
-  font-family:var(--mono);
-}
-.circuit-board .channel-list {
-  border-top:1px solid var(--line);
-  padding-top:15px;
-  flex-wrap:wrap;
-}
-.circuit-board .tab-button[aria-pressed="true"] {
-  background:var(--orange);
-}
-.sensor-note {
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.65;
-  min-height:64px;
-  margin-top:13px;
-}
-.wearable-principles {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:28px;
-  margin-top:30px;
-}
-.wearable-principles h4 {
-  font-family:var(--mono);
-  font-size:11px;
-  font-weight:400;
-  color:var(--orange);
-  margin-bottom:8px;
-}
-.wearable-principles p {
-  font-size:13px;
-  line-height:1.75;
-  color:var(--muted);
-}
-/* Project 03: observational data next to an idealized orbital model. */
-.star-section {
-  background:#202f2e;
-  color:#f5f3e9;
-  padding:54px 0 60px;
-}
-.star-section .project-topline {
-  border-color:#73857e;
-}
-.star-section .project-type,.star-section .credits,.star-section .muted {
-  color:#b6c4bc;
-}
-.star-section .credits strong {
-  color:#f5f3e9;
-}
-.star-layout {
-  display:grid;
-  grid-template-columns:1fr 1.1fr;
-  gap:7%;
-  align-items:start;
-}
-.star-copy h3 {
-  font-size:clamp(40px,4.6vw,64px);
-  letter-spacing:-.04em;
-  margin-bottom:22px;
-}
-.star-copy>p {
-  max-width:440px;
-  font-size:15px;
-  line-height:1.8;
-  color:#c0cdc5;
-}
-.survey {
-  margin-top:36px;
-}
-.survey-label {
-  display:flex;
-  align-items:baseline;
-  gap:15px;
-  margin-bottom:18px;
-}
-.survey-label strong {
-  font-family:var(--serif);
-  font-size:42px;
-  font-weight:400;
-}
-.survey-label span {
-  font-family:var(--mono);
-  font-size:11px;
-  color:#c0cdc5;
-}
-.survey-bar {
-  display:flex;
-  width:100%;
-  height:12px;
-  gap:3px;
-}
-.survey-bar span:nth-child(1) {
-  width:43%;
-  background:#a8c6ad;
-}
-.survey-bar span:nth-child(2) {
-  width:38%;
-  background:#d4a277;
-}
-.survey-bar span:nth-child(3) {
-  width:19%;
-  background:#81958c;
-}
-.survey-legend {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:13px;
-  font-size:11px;
-  font-family:var(--mono);
-  color:#c0cdc5;
-}
-.survey-legend b {
-  display:block;
-  font-size:17px;
-  font-weight:400;
-  color:#f5f3e9;
-}
-.orbit-figure {
-  border:1px solid #53665e;
-  padding:20px 23px;
-  background:linear-gradient(#b4ccbc08 1px,transparent 1px),linear-gradient(90deg,#b4ccbc08 1px,transparent 1px);
-  background-size:32px 32px;
-}
-.orbit-top {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  color:#b6c7b9;
-}
-.orbit-svg {
-  width:100%;
-  aspect-ratio:490/292;
-}
-.orbit-svg text {
-  font:11px var(--mono);
-}
-.orbit-figure .range-row {
-  margin-top:0;
-}
-.orbit-figure input {
-  accent-color:#bed7bc;
-}
-.orbit-figure figcaption {
-  border-top:1px solid #53665e;
-  margin-top:13px;
-  padding-top:13px;
-  font-size:11px;
-  color:#b6c7b9;
-}
-.star-bottom {
-  display:grid;
-  grid-template-columns:1fr 1.1fr;
-  gap:7%;
-  margin-top:30px;
-}
-.star-bottom .editorial {
-  font-style:italic;
-  font-size:24px;
-  line-height:1.5;
-  color:#d4b08b;
-}
-.star-section .research-notes {
-  border-color:#53665e;
-  margin-top:30px;
-}
-.star-section .research-notes summary:hover {
-  color:#bed7bc;
-}
-.star-section .notes-body p {
-  color:#c0cdc5;
-}
-.star-section .notes-body .note-line {
-  color:#d4b08b;
-}
-.star-section a:hover {
-  color:#bed7bc;
-}
-.star-section :focus-visible {
-  outline-color:#ecaa76;
-}
-/* Personal notes and the full chronological index. */
-.about {
-  padding:105px 0 95px;
-}
-.about-grid {
-  display:grid;
-  grid-template-columns:1fr 1.15fr;
-  gap:10%;
-}
-.about h2 {
-  font-size:clamp(35px,4.3vw,60px);
-  letter-spacing:-.035em;
-  margin:30px 0;
-}
-.about .opening-note {
-  font-family:var(--serif);
-  font-size:24px;
-  line-height:1.5;
-  max-width:460px;
-}
-.about-body p {
-  margin-bottom:20px;
-  font-size:15px;
-  color:var(--muted);
-  line-height:1.85;
-}
-.about-body strong {
-  color:var(--ink);
-  font-weight:500;
-}
-.tags {
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px 15px;
-  padding:20px 0;
-  border-top:1px solid var(--line);
-  font-size:10px;
-  letter-spacing:.025em;
-  color:var(--teal);
-  list-style:none;
-  margin:22px 0 0;
-}
-.slow-note {
-  margin-top:36px;
-  border-left:2px solid var(--orange);
-  padding-left:20px;
-  max-width:460px;
-}
-.slow-note .eyebrow {
-  color:var(--orange);
-  margin-bottom:10px;
-}
-.slow-note p {
-  font-size:13px;
-  line-height:1.8;
-  color:var(--muted);
-}
-.timeline {
-  padding:60px 0 85px;
-  border-top:1px solid var(--line);
-}
-.log-heading {
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:30px;
-  margin-bottom:32px;
-}
-.log-heading h2 {
-  font-size:44px;
-  margin-top:16px;
-}
-.quiet-button {
-  background:none;
-  border:0;
-  border-bottom:1px solid var(--ink);
-  padding:12px 0;
-  font-family:var(--mono);
-  font-size:11px;
-  min-height:44px;
-}
-.log-entry {
-  border-top:1px solid var(--line);
-}
-.log-entry:last-child {
-  border-bottom:1px solid var(--line);
-}
-.log-entry summary {
-  display:grid;
-  grid-template-columns:225px 1fr 24px;
-  gap:30px;
-  align-items:center;
-  padding:18px 0;
-  min-height:70px;
-}
-.log-entry summary:hover .log-title {
-  color:var(--teal);
-}
-.log-date {
-  color:var(--muted);
-  font-size:11px;
-}
-.log-title {
-  font-size:15px;
-  font-weight:500;
-  line-height:1.5;
-}
-.log-entry[open] .log-title {
-  color:var(--teal);
-}
-.log-body {
-  margin-left:255px;
-  max-width:690px;
-  padding:0 45px 26px 0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.8;
-}
-.log-body .log-reflection {
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:17px;
-  margin-top:15px;
-  color:var(--orange);
-}
-/* Product notes have a warmer paper stock and a more human scale. */
-.product {
-  background:#eee5d9;
-  padding:75px 0 80px;
-  border-top:1px solid #d3c6b7;
-  border-bottom:1px solid #d3c6b7;
-}
-.product .section-top {
-  margin-bottom:43px;
-}
-.product .eyebrow {
-  color:#814827;
-}
-.product-list {
-  margin-left:calc(25% + 8px);
-}
-.product-item {
-  display:grid;
-  grid-template-columns:60px 1fr;
-  gap:22px;
-  padding:35px 0;
-  border-top:1px solid #cbbbA8;
-}
-.product-number {
-  font-family:var(--serif);
-  font-style:italic;
-  color:#945536;
-  font-size:32px;
-  line-height:1.1;
-}
-.product-item h3 {
-  font-size:34px;
-  margin:10px 0 20px;
-  letter-spacing:-.025em;
-}
-.product-item p {
-  font-size:14px;
-  color:#5d6055;
-  line-height:1.85;
-  max-width:740px;
-  margin-top:15px;
-}
-.product-item .credits {
-  font-size:11px;
-  letter-spacing:.02em;
-}
-.learning-flow {
-  display:flex;
-  gap:14px;
-  align-items:center;
-  flex-wrap:wrap;
-  font-family:var(--serif);
-  font-style:italic;
-  font-size:23px;
-  color:#754629;
-  padding:20px 0 5px;
-}
-.learning-flow span[aria-hidden] {
-  font-family:var(--mono);
-  font-style:normal;
-  font-size:15px;
-}
-.product-item .text-link {
-  color:#814827;
-  margin-top:12px;
-}
-.product-note {
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-top:21px;
-  font-family:var(--mono);
-  font-size:11px;
-  color:#665646;
-}
-.product-note svg {
-  width:20px;
-  flex-shrink:0;
-}
-.contact {
-  padding:90px 0 55px;
-}
-.contact-layout {
-  display:grid;
-  grid-template-columns:1.35fr 1fr;
-  gap:10%;
-  align-items:end;
-}
-.contact h2 {
-  font-size:clamp(45px,5.8vw,80px);
-  letter-spacing:-.045em;
-  margin-top:26px;
-}
-.contact h2 em {
-  color:var(--teal);
-}
-.contact-side p {
-  font-size:15px;
-  line-height:1.8;
-  color:var(--muted);
-  max-width:365px;
-}
-.email-link {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  font-family:var(--serif);
-  font-size:clamp(21px,2.2vw,31px);
-  text-decoration:none;
-  border-bottom:1px solid var(--ink);
-  padding:20px 0 12px;
-}
-.footer {
-  margin-top:65px;
-  padding-top:22px;
-  border-top:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  font-family:var(--mono);
-  font-size:10px;
-  color:var(--muted);
-}
-.footer a {
-  text-decoration:none;
-}
-.footer .footer-name {
-  color:var(--ink);
-}
-@media(min-width:1600px) {
-  .hero {
-    padding-top:90px;
-  }
-  .hero-foot {
-    margin-top:80px;
-  }
-}
-@media(max-width:1100px) {
-  .shell {
-    width:calc(100% - 64px);
-  }
-  .hero-grid {
-    gap:5%;
-    grid-template-columns:1.15fr 1fr;
-  }
-  .hero h1 {
-    font-size:60px;
-  }
-  .hero-intro {
-    font-size:15px;
-  }
-  .wordmark small {
-    display:none;
-  }
-  .nav {
-    gap:21px;
-  }
-  .hero-foot {
-    margin-top:50px;
-  }
-  .evolution-board {
-    padding:23px;
-    gap:22px;
-  }
-  .evolution-readout {
-    padding-left:22px;
-  }
-  .stat {
-    gap:10px;
-  }
-  .stat strong {
-    font-size:36px;
-  }
-  .project-bottom {
-    gap:30px;
-  }
-  .process {
-    gap:16px;
-  }
-  .wearable-grid {
-    gap:5%;
-  }
-  .small-stats {
-    gap:21px;
-  }
-  .star-copy h3 {
-    font-size:47px;
-  }
-  .log-entry summary {
-    grid-template-columns:190px 1fr 24px;
-    gap:25px;
-  }
-  .log-body {
-    margin-left:215px;
-  }
-  .product-list {
-    margin-left:calc(25% + 8px);
-  }
-}
-@media(max-width:800px) {
-  html {
-    scroll-padding-top:86px;
-  }
-  .shell {
-    width:calc(100% - 40px);
-  }
-  .header-inner {
-    min-height:67px;
-  }
-  .wordmark {
-    font-size:15px;
-    gap:10px;
-  }
-  .nav {
-    gap:15px;
-  }
-  .nav a {
-    font-size:11px;
-  }
-  .hero {
-    padding-top:45px;
-  }
-  .hero-grid {
-    grid-template-columns:1fr;
-    gap:55px;
-  }
-  .hero h1 {
-    font-size:clamp(50px,8.5vw,70px);
-    max-width:650px;
-  }
-  .hero h1 br:first-of-type {
-    display:none;
-  }
-  .hero-intro {
-    max-width:580px;
-    font-size:17px;
-  }
-  .signal-notebook {
-    max-width:590px;
-    width:100%;
-    margin:0 auto;
-    transform:none;
-  }
-  .signal-figure {
-    padding:18px 23px 12px;
-  }
-  .signal-diagram {
-    max-height:190px;
-  }
-  .wave-box svg {
-    max-height:90px;
-  }
-  .signal-caption {
-    min-height:0;
-  }
-  .hero-foot {
-    margin-top:37px;
-  }
-  .hero-foot .index-ref {
-    display:none;
-  }
-  .work {
-    padding-top:70px;
-  }
-  .section-top {
-    grid-template-columns:1fr;
-    gap:18px;
-    margin-bottom:35px;
-  }
-  .section-top h2 {
-    font-size:40px;
-  }
-  .section-top .eyebrow {
-    padding-top:0;
-  }
-  .project-heading {
-    gap:28px;
-  }
-  .project-heading h3 {
-    font-size:43px;
-  }
-  .project-heading p {
-    font-size:13px;
-  }
-  .evolution-board {
-    grid-template-columns:1fr;
-    gap:15px;
-  }
-  .evolution-readout {
-    border-left:0;
-    padding:18px 0 0;
-    border-top:1px solid #a7bda6;
-  }
-  .evolution-readout .channel-list {
-    flex-direction:row;
-    margin:10px 0 14px;
-  }
-  .evolution-readout .tab-button {
-    width:auto;
-    flex:1;
-  }
-  .evolution-readout p {
-    font-size:22px;
-  }
-  .project-bottom {
-    grid-template-columns:1fr;
-    gap:22px;
-  }
-  .wearable-grid {
-    grid-template-columns:1fr;
-    gap:32px;
-  }
-  .wearable-copy h3 {
-    max-width:580px;
-  }
-  .wearable-copy>p {
-    max-width:580px;
-  }
-  .circuit-board {
-    max-width:650px;
-  }
-  .small-stats {
-    gap:40px;
-  }
-  .wearable-principles {
-    margin-top:22px;
-  }
-  .project {
-    padding-bottom:60px;
-  }
-  .star-layout {
-    grid-template-columns:1fr;
-    gap:35px;
-  }
-  .star-copy h3 {
-    max-width:570px;
-    font-size:48px;
-  }
-  .star-copy>p {
-    max-width:600px;
-  }
-  .survey {
-    max-width:490px;
-    margin-top:24px;
-  }
-  .orbit-figure {
-    max-width:620px;
-    width:100%;
-    justify-self:center;
-  }
-  .star-bottom {
-    grid-template-columns:1fr;
-    gap:24px;
-  }
-  .star-bottom .editorial {
-    font-size:23px;
-  }
-  .about {
-    padding:70px 0;
-  }
-  .about-grid {
-    gap:40px;
-  }
-  .about h2 {
-    font-size:40px;
-  }
-  .about .opening-note {
-    font-size:21px;
-  }
-  .about-body p {
-    font-size:14px;
-  }
-  .log-entry summary {
-    grid-template-columns:155px 1fr 24px;
-    gap:20px;
-  }
-  .log-body {
-    margin-left:175px;
-  }
-  .log-heading h2 {
-    font-size:38px;
-  }
-  .product {
-    padding:60px 0;
-  }
-  .product-list {
-    margin-left:0;
-  }
-  .contact {
-    padding-top:65px;
-  }
-  .contact-layout {
-    gap:40px;
-  }
-  .contact h2 {
-    font-size:48px;
-  }
-  .contact-side p {
-    font-size:13px;
-  }
-  .footer {
-    flex-wrap:wrap;
-    margin-top:50px;
-  }
-}
-@media(max-width:560px) {
-  .shell {
-    width:calc(100% - 36px);
-  }
-  .header-inner {
-    min-height:64px;
-    flex-wrap:wrap;
-    gap:0;
-  }
-  .wordmark .mark {
-    width:27px;
-    height:27px;
-  }
-  .js .menu-toggle {
-    display:block;
-    min-height:40px;
-  }
-  .nav {
-    width:100%;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:space-between;
-    gap:5px 15px;
-    padding:0 0 13px;
-  }
-  .js .nav:not(.is-open) {
-    display:none;
-  }
-  .nav a {
-    font-size:12px;
-    padding:8px 0;
-  }
-  .hero {
-    padding-top:33px;
-  }
-  .hero-kicker {
-    font-size:10px;
-    letter-spacing:.055em;
-    align-items:start;
-    margin-bottom:23px;
-  }
-  .hero-kicker .status-dot {
-    margin-top:5px;
-  }
-  .hero h1 {
-    font-size:clamp(44px,11.5vw,62px);
-    letter-spacing:-.05em;
-  }
-  .hero h1 br:first-of-type {
-    display:initial;
-  }
-  .hero-intro {
-    font-size:15px;
-    margin-top:23px;
-  }
-  .hero-actions {
-    gap:25px;
-    margin-top:23px;
-  }
-  .hero-actions .primary-link {
-    padding:12px 15px;
-  }
-  .text-link {
-    font-size:11px;
-    gap:14px;
-  }
-  .hero-grid {
-    gap:53px;
-  }
-  .signal-notebook {
-    box-shadow:4px 4px 0 #e5e5db;
-  }
-  .instrument-head {
-    padding:13px 14px;
-    font-size:10px;
-  }
-  .field-scribble {
-    font-size:15px;
-    right:6px;
-    top:-30px;
-  }
-  .signal-figure {
-    padding:17px 12px 8px;
-  }
-  .signal-controls {
-    padding:12px;
-  }
-  .signal-controls .tab-button {
-    flex:1;
-    padding:8px 5px;
-    font-size:10px;
-  }
-  .instrument-foot {
-    font-size:9px;
-  }
-  .signal-caption {
-    font-size:11px;
-    min-height:34px;
-  }
-  .hero-foot {
-    padding-bottom:15px;
-    font-size:10px;
-  }
-  .section-top h2 {
-    font-size:35px;
-  }
-  .section-top p {
-    font-size:14px;
-  }
-  .work {
-    padding-top:55px;
-  }
-  .project-topline {
-    margin-bottom:25px;
-    gap:10px;
-    padding-top:16px;
-  }
-  .project-topline .eyebrow {
-    font-size:10px;
-    letter-spacing:.055em;
-  }
-  .project-type {
-    display:none;
-  }
-  .project-index {
-    width:28px;
-    height:28px;
-    font-size:10px;
-  }
-  .project-heading {
-    grid-template-columns:1fr;
-    gap:19px;
-    margin-bottom:25px;
-  }
-  .project-heading h3 {
-    font-size:42px;
-  }
-  .project-heading p {
-    font-size:14px;
-  }
-  .evolution-board {
-    padding:18px 14px;
-  }
-  .population-header {
-    font-size:9px;
-  }
-  .population-svg {
-    min-height:155px;
-  }
-  .evolution-readout .tab-button {
-    font-size:10px;
-    padding:8px;
-  }
-  .chart-note {
-    font-size:9px;
-    gap:10px;
-  }
-  .evolution-readout p {
-    font-size:21px;
-  }
-  .stats {
-    gap:16px;
-    padding:18px 0;
-    margin-bottom:20px;
-  }
-  .stat {
-    display:block;
-  }
-  .stat strong {
-    display:block;
-    font-size:34px;
-    line-height:1.3;
-  }
-  .stat span {
-    display:block;
-    font-size:10px;
-    max-width:95px;
-  }
-  .process {
-    grid-template-columns:1fr;
-    gap:17px;
-  }
-  .process>div {
-    display:grid;
-    grid-template-columns:77px 1fr;
-    gap:18px;
-  }
-  .process h4 {
-    margin-top:3px;
-  }
-  .process p {
-    font-size:12px;
-  }
-  .research-notes {
-    margin-top:23px;
-  }
-  .research-notes summary {
-    font-size:11px;
-    gap:12px;
-  }
-  .notes-body p {
-    font-size:13px;
-  }
-  .wearable-copy h3 {
-    font-size:43px;
-  }
-  .wearable-copy>p {
-    font-size:14px;
-  }
-  .small-stats {
-    margin:23px 0;
-    justify-content:space-between;
-    gap:16px;
-  }
-  .small-stats .stat strong {
-    font-size:34px;
-  }
-  .small-stats .stat span {
-    font-size:10px;
-  }
-  .circuit-board {
-    padding:15px 12px;
-  }
-  .circuit-board svg {
-    margin:20px 0;
-  }
-  .circuit-board .tab-button {
-    padding:8px 7px;
-    font-size:10px;
-    flex:1;
-  }
-  .sensor-note {
-    min-height:76px;
-    font-size:11px;
-  }
-  .wearable-principles {
-    gap:20px;
-  }
-  .wearable-principles p {
-    font-size:12px;
-  }
-  .star-section {
-    padding:35px 0 40px;
-  }
-  .star-copy h3 {
-    font-size:43px;
-  }
-  .star-copy>p {
-    font-size:14px;
-  }
-  .survey-label strong {
-    font-size:35px;
-  }
-  .survey-label span {
-    font-size:10px;
-  }
-  .survey-legend {
-    font-size:9px;
-  }
-  .orbit-figure {
-    padding:15px 12px;
-  }
-  .orbit-top {
-    font-size:9px;
-  }
-  .orbit-figure figcaption {
-    font-size:10px;
-  }
-  .star-bottom .editorial {
-    font-size:22px;
-  }
-  .about-grid {
-    grid-template-columns:1fr;
-    gap:30px;
-  }
-  .about {
-    padding:60px 0;
-  }
-  .about h2 {
-    font-size:42px;
-    margin:23px 0;
-  }
-  .about .opening-note {
-    font-size:24px;
-  }
-  .slow-note {
-    margin-top:25px;
-  }
-  .about-body p {
-    font-size:14px;
-  }
-  .about-body p:last-of-type {
-    margin-bottom:0;
-  }
-  .timeline {
-    padding:45px 0 60px;
-  }
-  .log-heading {
-    align-items:end;
-    gap:20px;
-    margin-bottom:25px;
-  }
-  .log-heading h2 {
-    font-size:34px;
-  }
-  .quiet-button {
-    font-size:10px;
-    flex-shrink:0;
-  }
-  .log-entry summary {
-    grid-template-columns:1fr 24px;
-    gap:4px 18px;
-    padding:15px 0;
-  }
-  .log-date {
-    grid-column:1;
-    font-size:10px;
-  }
-  .log-title {
-    grid-column:1;
-    font-size:14px;
-  }
-  .log-entry .disclosure {
-    grid-column:2;
-    grid-row:1/3;
-    justify-self:end;
-  }
-  .log-body {
-    margin-left:0;
-    padding:0 20px 22px 0;
-    font-size:13px;
-  }
-  .product {
-    padding:48px 0;
-  }
-  .product-item {
-    grid-template-columns:28px 1fr;
-    gap:17px;
-    padding:28px 0;
-  }
-  .product-number {
-    font-size:26px;
-  }
-  .product-item h3 {
-    font-size:30px;
-  }
-  .product-item p {
-    font-size:13px;
-    line-height:1.8;
-  }
-  .product-item .credits {
-    font-size:10px;
-  }
-  .learning-flow {
-    font-size:19px;
-    gap:8px;
-  }
-  .product-note {
-    font-size:10px;
-  }
-  .contact {
-    padding:55px 0 30px;
-  }
-  .contact-layout {
-    grid-template-columns:1fr;
-    gap:32px;
-  }
-  .contact h2 {
-    font-size:49px;
-    margin-top:22px;
-  }
-  .contact-side p {
-    font-size:14px;
-    max-width:360px;
-  }
-  .email-link {
-    font-size:29px;
-  }
-  .footer {
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:12px;
-    margin-top:45px;
-    font-size:9px;
-  }
-  .footer p:nth-child(2) {
-    grid-row:2;
-    grid-column:1/3;
-  }
-  .footer a {
-    grid-column:2;
-    grid-row:1;
-  }
-}
-@media(prefers-reduced-motion:reduce) {
-  html {
-    scroll-behavior:auto;
-  }
-  *,*::before,*::after {
-    transition:none!important;
-    animation:none!important;
-  }
-}
-@media print {
-  .topbar,.hero-actions,.menu-toggle,.quiet-button,.channel-list,.range-row {
-    display:none!important;
-  }
-  .shell {
-    width:100%;
-  }
+  /* Layout: a typographic hero on lamp-lit graph paper, then full-width "benches" where each
+     project is a working demo with a two-line caption. Single dark theme by choice:
+     night blues lit by chrome yellow and ochre, taken from the palette, not the painting. */
+  :root {
+    color-scheme: dark;
+    --ink-0: #0B1124;
+    --ink-1: #111A33;
+    --ink-2: #0E1730;
+    --ink-3: #1A2649;
+    --rule: #26345E;
+    --rule-soft: rgba(38, 52, 94, 0.6);
+    --paper: #F2E8CE;
+    --paper-2: #C3BAA1;
+    --paper-3: #8E8974;
+    --chrome: #F3C24F;
+    --ochre: #D98E3A;
+    --cobalt: #5D87C9;
+    --cerulean: #9DBBE3;
+    --ok: #74B48A;
+    --alarm: #E5674F;
+    --lamp: rgba(243, 194, 79, 0.11);
+    --lamp-2: rgba(217, 142, 58, 0.07);
+    --lcd: #1E3F8F;
+    --lcd-ink: #E8F0FF;
+
+    --display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+    --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --gutter: clamp(16px, 4.5vw, 48px);
+    --max: 1200px;
+    --r: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px); }
   body {
-    font-size:11pt;
+    margin: 0;
+    background: var(--ink-0);
+    color: var(--paper);
+    font: 400 17px/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  .hero,.work,.about,.timeline,.product,.contact {
-    padding-block:20px;
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 700; margin: 0; line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; color: var(--paper); }
+  p { margin: 0; }
+  a { color: inherit; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--chrome); outline-offset: 3px; border-radius: 4px; }
+  .wrap { width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; }
+  .mono { font-family: var(--mono); }
+  .label { font: 500 0.72rem/1.45 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-3); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30;
+    background: color-mix(in srgb, var(--ink-0) 84%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule-soft);
   }
-  details {
-    break-inside:avoid;
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.8rem; }
+  .brand { font: 700 1.08rem/1 var(--display); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; }
+  .brand i { font-style: normal; color: var(--chrome); }
+  .links { display: flex; gap: 1.3rem; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+  .links::-webkit-scrollbar { display: none; }
+  .links a { font-size: 0.86rem; color: var(--paper-2); text-decoration: none; white-space: nowrap; padding-block: 0.2rem; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+  .links a:hover, .links a.on { color: var(--paper); border-color: var(--chrome); }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; padding-block: clamp(48px, 8vw, 112px) clamp(40px, 6vw, 80px); border-bottom: 1px solid var(--rule-soft); --mx: 72%; --my: 32%; }
+  .hero-dots, .hero-lamp, .hero-glow { position: absolute; inset: 0; pointer-events: none; }
+  .hero-dots { background-image: radial-gradient(circle, var(--rule) 1.1px, transparent 1.7px); background-size: 24px 24px; }
+  .hero-glow { background: radial-gradient(560px circle at var(--mx) var(--my), var(--lamp), transparent 65%), radial-gradient(900px circle at calc(var(--mx) - 10%) calc(var(--my) + 20%), var(--lamp-2), transparent 70%); }
+  .hero-lamp {
+    background-image: radial-gradient(circle, var(--chrome) 1.2px, transparent 1.8px); background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000, transparent 72%);
+    mask-image: radial-gradient(240px circle at var(--mx) var(--my), #000, transparent 72%);
+    opacity: 0.75;
   }
-  a {
-    text-decoration:underline;
+  .hero .wrap { position: relative; }
+  .kicker { display: flex; flex-wrap: wrap; gap: 0.35rem 1.2rem; font: 500 0.76rem/1.5 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-2); }
+  .kicker span:first-child { color: var(--chrome); }
+  .headline {
+    margin-top: clamp(1.2rem, 3vw, 2rem);
+    font-size: clamp(2.6rem, 11vw, 8.1rem);
+    font-weight: 760; line-height: 0.93; letter-spacing: -0.04em;
+    font-variation-settings: "opsz" 96;
   }
-  .star-section {
-    background:#fff;
-    color:#242d2b;
+  .headline .ln { display: block; }
+  .headline .soft { color: var(--paper-2); font-weight: 340; }
+  .slot {
+    position: relative; display: inline-flex; vertical-align: top; overflow: hidden;
+    color: var(--chrome); font-weight: 800; font-stretch: 75%; letter-spacing: -0.03em;
+    text-decoration: none; padding-bottom: 0.1em; margin-bottom: -0.1em;
+    transition: width .55s cubic-bezier(.2,.75,.2,1);
   }
-  .star-section p,.star-section .credits {
-    color:#242d2b;
+  .slot::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.06em; height: 0.055em; background: var(--chrome); opacity: 0.55; }
+  .slot .w { display: inline-flex; flex: none; white-space: pre; }
+  .slot .w.out { position: absolute; left: 0; top: 0; }
+  .slot .ch { display: inline-block; animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
+  .slot .w.out .ch { animation: sink .32s ease-in both; animation-delay: 0ms !important; }
+  .slot .w.still .ch { animation: none; }
+  @keyframes rise { from { transform: translateY(0.9em); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes sink { to { transform: translateY(-0.8em); opacity: 0; } }
+
+  .hero-foot { margin-top: clamp(2rem, 5vw, 3.5rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 2rem clamp(2rem, 6vw, 5rem); align-items: start; }
+  .intro { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--paper-2); max-width: 40ch; }
+  .intro b { color: var(--paper); font-weight: 600; }
+  .index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .index a { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) auto; gap: 0.8rem; align-items: baseline; padding: 0.7rem 0.2rem; border-bottom: 1px solid var(--rule); text-decoration: none; transition: background-color .2s, padding .2s; }
+  .index a:hover { background: color-mix(in srgb, var(--chrome) 7%, transparent); padding-left: 0.6rem; }
+  .index .n { font: 500 0.75rem var(--mono); color: var(--chrome); }
+  .index .t { font: 600 1.05rem/1.3 var(--display); }
+  .index .k { font: 400 0.75rem var(--mono); color: var(--paper-3); text-align: right; }
+
+  /* ---------- sections ---------- */
+  .sec { padding-block: clamp(64px, 9vw, 120px); border-bottom: 1px solid var(--rule-soft); }
+  .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 1rem 3rem; align-items: end; margin-bottom: clamp(1.8rem, 4vw, 2.8rem); }
+  .sec-head h2 { font-size: clamp(2.3rem, 5.4vw, 4.4rem); letter-spacing: -0.035em; }
+  .sec-head p { color: var(--paper-2); max-width: 48ch; }
+  .sec-head .label { grid-column: 1 / -1; color: var(--chrome); }
+
+  .case { padding-block: clamp(48px, 6vw, 84px); }
+  .case + .case { border-top: 1px solid var(--rule-soft); }
+  .case-head { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 1rem 3rem; align-items: end; margin-bottom: 1.6rem; }
+  .case-head .label { grid-column: 1 / -1; }
+  .case-title { font-size: clamp(2rem, 4.4vw, 3.5rem); letter-spacing: -0.03em; }
+  .case-side { display: grid; gap: 0.9rem; }
+  .case-lede { color: var(--paper-2); max-width: 50ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; list-style: none; margin: 0; padding: 0; }
+  .facts li { font: 500 0.78rem/1.3 var(--mono); color: var(--paper-2); display: flex; align-items: baseline; gap: 0.4rem; }
+  .facts b { font: 700 1.45rem/1 var(--display); color: var(--chrome); letter-spacing: -0.02em; }
+
+  /* ---------- demo shell ---------- */
+  .demo { border: 1px solid var(--rule); border-radius: var(--r); background: var(--ink-1); overflow: hidden; }
+  .demo-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+  .stage { position: relative; min-width: 0; background: var(--ink-2); }
+  .stage canvas { display: block; width: 100%; }
+  .panel { display: grid; gap: 1.05rem; align-content: start; padding: 1.15rem 1.2rem 1.25rem; border-left: 1px solid var(--rule); min-width: 0; }
+  .demo-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1.5rem; padding: 0.7rem 1.1rem; border-top: 1px solid var(--rule); font: 400 0.74rem/1.5 var(--mono); color: var(--paper-3); }
+  .hint { position: absolute; left: 0.9rem; top: 0.8rem; font: 500 0.72rem/1.4 var(--mono); color: var(--paper-2); background: color-mix(in srgb, var(--ink-0) 70%, transparent); border: 1px solid var(--rule); border-radius: 999px; padding: 0.28rem 0.7rem; pointer-events: none; }
+
+  .ctl { display: grid; gap: 0.35rem; }
+  .ctl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; }
+  .ctl label, .ctl .lbl { font: 500 0.78rem var(--mono); color: var(--paper-2); }
+  .ctl output { font: 500 0.82rem var(--mono); color: var(--paper); font-variant-numeric: tabular-nums; }
+  .ctl .ends { display: flex; justify-content: space-between; font: 400 0.68rem var(--mono); color: var(--paper-3); }
+  input[type=range] { width: 100%; accent-color: var(--chrome); height: 26px; margin: 0; cursor: pointer; }
+
+  .row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+    padding: 0.55rem 0.95rem; border-radius: 999px; border: 1px solid var(--rule);
+    background: transparent; color: var(--paper); font: 600 0.86rem/1 var(--body);
+    cursor: pointer; text-decoration: none; transition: background-color .2s, border-color .2s, color .2s, transform .15s;
   }
-  .signal-notebook {
-    box-shadow:none;
-    transform:none;
+  .btn:hover { border-color: var(--chrome); }
+  .btn:active { transform: translateY(1px); }
+  .btn.solid { background: var(--chrome); border-color: var(--chrome); color: var(--ink-0); }
+  .btn.solid:hover { background: var(--paper); border-color: var(--paper); }
+  .btn.small { padding: 0.42rem 0.75rem; font-size: 0.8rem; }
+  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; padding: 0.55rem 0.4rem; font: 500 0.76rem/1.25 var(--mono); color: var(--paper-2); cursor: pointer; transition: background-color .2s, color .2s; }
+  .seg button + button { border-left: 1px solid var(--rule); }
+  .seg button[aria-pressed="true"] { background: var(--chrome); color: var(--ink-0); }
+  .seg button:hover:not([aria-pressed="true"]) { background: var(--ink-3); color: var(--paper); }
+
+  .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem 1rem; padding-top: 0.9rem; border-top: 1px dashed var(--rule); }
+  .readout div { display: grid; gap: 0.1rem; }
+  .readout dt { font: 400 0.68rem var(--mono); color: var(--paper-3); letter-spacing: 0.04em; text-transform: uppercase; }
+  .readout dd { margin: 0; font: 700 1.25rem/1.1 var(--display); font-variant-numeric: tabular-nums; }
+  .readout dd small { font: 500 0.72rem var(--mono); color: var(--paper-3); margin-left: 0.3rem; }
+  .verdict { font: 600 1.02rem/1.35 var(--display); color: var(--chrome); min-height: 2.7em; }
+  .legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font: 400 0.72rem var(--mono); color: var(--paper-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+
+  details.more { margin-top: 1rem; border-top: 1px solid var(--rule-soft); }
+  details.more summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 0; font: 500 0.8rem var(--mono); color: var(--paper-2); }
+  details.more summary::-webkit-details-marker { display: none; }
+  details.more summary::after { content: "+"; font-size: 1.2rem; color: var(--chrome); transition: transform .2s; }
+  details.more[open] summary::after { transform: rotate(45deg); }
+  details.more summary:hover { color: var(--paper); }
+  details.more .body { display: grid; gap: 0.8rem; padding-bottom: 0.6rem; color: var(--paper-2); max-width: 70ch; font-size: 0.98rem; }
+  details.more b { color: var(--paper); font-weight: 600; }
+
+  /* ---------- shark ---------- */
+  #shark-ocean { height: 360px; }
+  #shark-chart { height: 150px; border-top: 1px solid var(--rule); background: var(--ink-1); }
+
+  /* ---------- wearable ---------- */
+  .stage.fill { min-height: 330px; }
+  .stage.fill canvas { position: absolute; inset: 0; height: 100%; }
+  .lcd {
+    font: 500 0.95rem/1.35 var(--mono); letter-spacing: 0.08em; white-space: pre;
+    background: var(--lcd); color: var(--lcd-ink); border-radius: 6px; padding: 0.6rem 0.75rem;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.25), inset 0 0 18px rgba(0,0,0,.35);
+    overflow: hidden;
   }
-}
+  .leds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+  .led { display: grid; justify-items: center; gap: 0.3rem; font: 500 0.68rem var(--mono); color: var(--paper-3); }
+  .led i { width: 16px; height: 16px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); transition: background-color .2s, box-shadow .2s; }
+  .led.bad i { background: var(--alarm); box-shadow: 0 0 14px var(--alarm); }
+  .code { margin: 0; font: 400 0.72rem/1.6 var(--mono); color: var(--paper-3); background: var(--ink-2); border: 1px solid var(--rule); border-radius: 8px; padding: 0.55rem 0.7rem; overflow-x: auto; white-space: pre; }
+  .code span { display: block; border-radius: 3px; padding-inline: 0.2rem; transition: background-color .2s, color .2s; }
+  .code span.hit { background: color-mix(in srgb, var(--alarm) 22%, transparent); color: var(--paper); }
+
+  /* ---------- stars ---------- */
+  #star-sky { height: 380px; }
+  #star-energy { height: 120px; border-top: 1px solid var(--rule); background: var(--ink-1); }
+  .survey { display: grid; gap: 0.5rem; }
+  .bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--ink-3); }
+  .bar span { height: 100%; }
+  .stage-msg { position: absolute; right: 0.9rem; bottom: 0.8rem; font: 500 0.74rem var(--mono); color: var(--chrome); background: color-mix(in srgb, var(--ink-0) 75%, transparent); border: 1px solid var(--rule); border-radius: 999px; padding: 0.28rem 0.7rem; }
+  .toggle { display: flex; align-items: center; gap: 0.6rem; font: 500 0.78rem var(--mono); color: var(--paper-2); cursor: pointer; }
+  .toggle input { accent-color: var(--chrome); width: 16px; height: 16px; }
+
+  /* ---------- arm ---------- */
+  #arm-bench { height: 380px; touch-action: none; cursor: crosshair; }
+  .cap { display: grid; gap: 0.45rem; }
+  .cap-bar { position: relative; height: 10px; border-radius: 999px; background: var(--ink-3); }
+  .cap-bar span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--ochre); transition: width .45s cubic-bezier(.2,.8,.2,1), background-color .3s; }
+  .cap-bar span.ok { background: var(--chrome); }
+  .cap-bar em { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--paper); }
+  .cap-bar em::after { content: "200 g vial"; position: absolute; top: -1.35rem; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 400 0.66rem var(--mono); color: var(--paper-2); font-style: normal; }
+  .cap-txt { font: 500 0.78rem/1.5 var(--mono); color: var(--paper-2); min-height: 3em; }
+  .cap-txt b { color: var(--paper); font-weight: 500; }
+
+  /* ---------- lab ---------- */
+  .lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+  .card { display: grid; grid-template-rows: auto 1fr auto; border: 1px solid var(--rule); border-radius: var(--r); background: var(--ink-1); overflow: hidden; min-width: 0; }
+  .card-head { display: grid; gap: 0.35rem; padding: 1.1rem 1.2rem 0.9rem; }
+  .card-head h3 { font-size: 1.45rem; }
+  .card-head p:not(.label) { color: var(--paper-2); font-size: 0.95rem; }
+  .card-body { position: relative; display: grid; align-content: center; background: var(--ink-2); border-top: 1px solid var(--rule); min-width: 0; }
+  .card-body canvas { display: block; width: 100%; }
+  .card-ctl { display: grid; gap: 0.7rem; padding: 0.9rem 1.2rem 1.1rem; border-top: 1px solid var(--rule); }
+
+  /* lamp */
+  .lamp-wrap { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1.1rem 1.2rem; min-height: 230px; }
+  .lamp { position: relative; width: 120px; height: 180px; margin-inline: auto; }
+  .lamp .glass { position: absolute; left: 14px; right: 14px; top: 26px; bottom: 34px; border-radius: 18px 18px 10px 10px; border: 2px solid var(--paper-3); background: color-mix(in srgb, var(--ink-3) 70%, transparent); transition: background-color .25s, box-shadow .25s, border-color .25s; }
+  .lamp .cap-top { position: absolute; left: 30px; right: 30px; top: 14px; height: 14px; border-radius: 6px 6px 0 0; background: var(--paper-3); }
+  .lamp .base { position: absolute; left: 6px; right: 6px; bottom: 14px; height: 22px; border-radius: 6px; background: var(--ink-3); border: 2px solid var(--paper-3); }
+  .lamp .grill { position: absolute; left: 22px; right: 22px; bottom: 19px; height: 12px; background: repeating-linear-gradient(90deg, var(--paper-3) 0 2px, transparent 2px 6px); opacity: .6; }
+  .lamp .bulb { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -18px 0 0 -11px; border-radius: 50%; background: var(--ink-3); transition: background-color .25s, box-shadow .25s; }
+  .lamp.l1 .glass { border-color: var(--ochre); background: color-mix(in srgb, var(--ochre) 18%, var(--ink-2)); box-shadow: 0 0 40px color-mix(in srgb, var(--ochre) 45%, transparent); }
+  .lamp.l1 .bulb { background: var(--ochre); box-shadow: 0 0 22px var(--ochre); }
+  .lamp.l2 .glass { border-color: var(--alarm); background: color-mix(in srgb, var(--alarm) 22%, var(--ink-2)); box-shadow: 0 0 50px color-mix(in srgb, var(--alarm) 55%, transparent); }
+  .lamp.l2 .bulb { background: var(--alarm); box-shadow: 0 0 26px var(--alarm); animation: blink .6s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .45; } }
+  .speech { position: absolute; right: -6px; top: -4px; transform: translateX(40%); font: 500 0.7rem/1.3 var(--mono); color: var(--ink-0); background: var(--paper); border-radius: 10px; padding: 0.35rem 0.55rem; white-space: nowrap; opacity: 0; transition: opacity .25s; }
+  .lamp.l2 .speech { opacity: 1; }
+  .lamp-read { display: grid; gap: 0.6rem; min-width: 0; }
+  .meter { position: relative; height: 14px; border-radius: 4px; background: var(--ink-3); overflow: hidden; }
+  .meter span { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, var(--ok), var(--ochre) 55%, var(--alarm)); background-size: 100% 100%; }
+  .ticks { position: relative; height: 14px; font: 400 0.64rem var(--mono); color: var(--paper-3); }
+  .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .lvl { font: 700 1.1rem/1.3 var(--display); }
+  .lvl small { display: block; font: 400 0.75rem var(--mono); color: var(--paper-2); }
+
+  /* seats */
+  .seats-wrap { padding: 0.9rem 1.2rem 1rem; display: grid; gap: 0.5rem; }
+  .board { width: 100%; max-width: 440px; margin-inline: auto; text-align: center; font: 500 0.66rem var(--mono); letter-spacing: 0.2em; color: var(--paper-3); border: 1px solid var(--rule); border-radius: 4px; padding: 0.15rem; }
+  .seats { position: relative; width: 100%; max-width: 440px; margin-inline: auto; aspect-ratio: 6 / 3.6; }
+  .seat { position: absolute; display: grid; place-items: center; width: calc(100% / 6 - 6px); height: calc(100% / 6 - 6px); border-radius: 6px; font: 500 0.78rem var(--mono); color: var(--ink-0); transition: left .7s cubic-bezier(.2,.8,.2,1), top .7s cubic-bezier(.2,.8,.2,1), background-color .4s; }
+  .seat.z-front { background: var(--chrome); }
+  .seat.z-side { background: var(--cobalt); color: var(--paper); }
+  .seat.z-mid { background: var(--ink-3); color: var(--paper-2); }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; font: 400 0.74rem var(--mono); color: var(--paper-2); }
+  .checks li::before { content: "○ "; color: var(--paper-3); }
+  .checks li.ok::before { content: "✓ "; color: var(--ok); }
+  .zkey { display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; font: 400 0.68rem var(--mono); color: var(--paper-3); }
+  .zkey i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 0.35rem; vertical-align: -1px; }
+
+  /* coaster + molecule */
+  #coaster { height: 230px; }
+  .speeds { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; align-items: end; height: 92px; }
+  .speeds div { display: grid; gap: 0.2rem; align-content: end; justify-items: center; height: 100%; font: 400 0.64rem var(--mono); color: var(--paper-3); }
+  .speeds span { width: 100%; max-width: 34px; border-radius: 4px 4px 0 0; background: var(--ink-3); transition: height .35s cubic-bezier(.2,.8,.2,1), background-color .3s; height: 2px; }
+  .speeds span.set { background: var(--cobalt); }
+  .speeds div:last-child span.set { background: var(--chrome); }
+  .speeds b { font-weight: 500; color: var(--paper); font-variant-numeric: tabular-nums; }
+  #molecule { height: 230px; cursor: grab; touch-action: none; }
+  #molecule:active { cursor: grabbing; }
+
+  /* ---------- product ---------- */
+  .prod-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+  .prod { display: grid; gap: 0.85rem; padding: 1.4rem 1.4rem 1.5rem; border: 1px solid var(--rule); border-radius: var(--r); background: var(--ink-1); min-width: 0; }
+  .prod h3 { font-size: 1.9rem; }
+  .prod > p { color: var(--paper-2); }
+  .tryit { display: grid; gap: 0.9rem; margin-top: 0.4rem; padding: 1.1rem; border-radius: 10px; background: var(--ink-2); border: 1px solid var(--rule); }
+  .problem { font: 600 1.15rem/1.4 var(--display); }
+  .problem em { font-style: normal; color: var(--chrome); }
+  .steps { display: flex; gap: 0.4rem; }
+  .steps i { flex: 1; height: 4px; border-radius: 2px; background: var(--ink-3); transition: background-color .3s; }
+  .steps i.done { background: var(--chrome); }
+  .steps i.now { background: var(--cobalt); }
+  .step { display: grid; gap: 0.7rem; }
+  .step[hidden] { display: none; }
+  .step .q { font-weight: 600; }
+  .choices { display: grid; gap: 0.45rem; }
+  .choices button { text-align: left; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--rule); background: transparent; cursor: pointer; font: 400 0.95rem/1.35 var(--body); transition: border-color .2s, background-color .2s; }
+  .choices button:hover { border-color: var(--chrome); }
+  .choices button.no { border-color: var(--alarm); background: color-mix(in srgb, var(--alarm) 10%, transparent); }
+  .choices button.yes { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+  .fill { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; font: 500 1.05rem var(--mono); }
+  .fill input { width: 3.2rem; padding: 0.35rem 0.4rem; text-align: center; border-radius: 6px; border: 1px solid var(--rule); background: var(--ink-1); font: 500 1rem var(--mono); }
+  .fill input:focus { outline: none; border-color: var(--chrome); }
+  .guide { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.6rem; padding: 0.65rem 0.8rem; border-radius: 8px; background: color-mix(in srgb, var(--cobalt) 14%, transparent); border: 1px solid color-mix(in srgb, var(--cobalt) 45%, transparent); font-size: 0.92rem; color: var(--paper); }
+  .guide b { font: 500 0.7rem var(--mono); color: var(--cerulean); letter-spacing: 0.08em; padding-top: 0.15rem; }
+  .locked { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; padding-top: 0.8rem; border-top: 1px dashed var(--rule); font: 400 0.76rem var(--mono); color: var(--paper-3); }
+  .solution { display: grid; gap: 0.3rem; font: 400 0.88rem/1.55 var(--mono); color: var(--paper-2); }
+  .solution[hidden] { display: none; }
+
+  /* ---------- about / timeline ---------- */
+  .about-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 2rem clamp(2rem, 6vw, 5rem); }
+  .prose { display: grid; gap: 1rem; color: var(--paper-2); max-width: 60ch; font-size: 1.04rem; }
+  .prose b { color: var(--paper); font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; list-style: none; margin: 1.2rem 0 0; padding: 0; }
+  .chips li { font: 500 0.74rem var(--mono); padding: 0.32rem 0.7rem; border: 1px solid var(--rule); border-radius: 999px; color: var(--paper); }
+  .note { display: grid; gap: 0.6rem; padding: 1.3rem 1.3rem 1.4rem; border-radius: var(--r); border: 1px solid color-mix(in srgb, var(--chrome) 35%, var(--rule)); background: linear-gradient(160deg, color-mix(in srgb, var(--chrome) 10%, var(--ink-1)), var(--ink-1) 60%); }
+  .note h3 { font-size: 1.35rem; }
+  .note p:not(.label) { color: var(--paper-2); font-size: 0.96rem; }
+  .note .label { color: var(--chrome); }
+  .nowlist { display: grid; gap: 0.7rem; margin-top: 1.4rem; }
+  .nowlist li { list-style: none; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.7rem; align-items: baseline; color: var(--paper-2); font-size: 0.95rem; }
+  .nowlist ul { margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .nowlist li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ochre); box-shadow: 0 0 8px var(--ochre); transform: translateY(-1px); }
+  .nowlist b { color: var(--paper); font-weight: 600; }
+
+  .tl { list-style: none; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; padding: 0; border-top: 1px solid var(--rule); }
+  .tl li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) auto; gap: 1rem; align-items: baseline; padding: 0.75rem 0; border-bottom: 1px solid var(--rule-soft); }
+  .tl .y { font: 500 0.8rem var(--mono); color: var(--paper-3); font-variant-numeric: tabular-nums; }
+  .tl .what { font: 600 1rem/1.4 var(--display); }
+  .tl .what span { font: 400 0.9rem var(--body); color: var(--paper-2); margin-left: 0.4rem; }
+  .tl a { font: 500 0.74rem var(--mono); color: var(--chrome); text-decoration: none; white-space: nowrap; }
+  .tl a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .tl li.big .what { color: var(--chrome); }
+
+  /* ---------- contact ---------- */
+  .contact h2 { font-size: clamp(2.8rem, 8vw, 6.5rem); letter-spacing: -0.045em; line-height: 0.95; }
+  .contact h2 span { color: var(--chrome); font-stretch: 75%; }
+  .reach { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; margin-top: 2rem; }
+  .email { font: 500 clamp(1rem, 2.4vw, 1.25rem) var(--mono); padding: 0.62rem 1rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--ink-1); user-select: all; -webkit-user-select: all; overflow-wrap: anywhere; }
+  footer { padding-block: 2rem 3rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font: 400 0.78rem var(--mono); color: var(--paper-3); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 960px) {
+    .demo-grid { grid-template-columns: 1fr; }
+    .panel { border-left: 0; border-top: 1px solid var(--rule); }
+    .prod-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 820px) {
+    .hero-foot, .sec-head, .case-head, .about-grid { grid-template-columns: 1fr; }
+    .lab-grid { grid-template-columns: 1fr; }
+    #shark-ocean { height: 280px; }
+    #star-sky { height: 320px; }
+    #arm-bench { height: 320px; }
+    .stage.fill { min-height: 280px; }
+  }
+  @media (max-width: 560px) {
+    .links { gap: 1rem; -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent); mask-image: linear-gradient(90deg, #000 80%, transparent); padding-right: 1.5rem; }
+    .index a { grid-template-columns: 2rem minmax(0, 1fr); }
+    .index .k { grid-column: 2; text-align: left; margin-top: -0.4rem; }
+    .lamp-wrap { grid-template-columns: 1fr; justify-items: stretch; }
+    .tl li { grid-template-columns: 4.6rem minmax(0, 1fr); }
+    .tl a { grid-column: 2; }
+    .tl .what span { display: block; margin-left: 0; }
+    .readout dd { font-size: 1.1rem; }
+    .seg button { font-size: 0.7rem; padding-inline: 0.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .slot, .seat, .cap-bar span, .speeds span { transition: none; }
+    .lamp.l2 .bulb { animation: none; }
+  }
 </style>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+
 <header class="topbar">
-  <div class="shell header-inner">
-    <a class="wordmark" href="#hero" aria-label="Olivia Ahn, back to top"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M1 19h7l4-12 6 22 5-14 3 4h5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Olivia Ahn <small>ENGINEERING FIELD NOTES</small></a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation">Menu +</button>
-    <nav class="nav" id="navigation" aria-label="Main navigation"><a href="#flagship">Selected work</a><a href="#about">About</a><a href="#timeline">Experiment log</a><a href="#contact">Get in touch ↗</a></nav>
+  <div class="wrap">
+    <a class="brand" href="#top">Olivia Ahn<i>.</i></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#arm">Start</a>
+      <a href="#work">Work</a>
+      <a href="#lab">Lab</a>
+      <a href="#product">Product</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </div>
 </header>
-<main id="main">
-<section class="hero shell" id="hero" aria-labelledby="hero-title">
-  <div class="eyebrow hero-kicker"><span class="status-dot" aria-hidden="true"></span>Olivia Ahn / Computer Engineering / Michigan State University</div>
-  <div class="hero-grid">
-    <div><h1 id="hero-title">I build things<br> to <em>understand</em><br> how they work.</h1><p class="hero-intro">I’m a computer engineer drawn to the <strong>physical layer between humans, machines, and AI.</strong> Sensors, simulations, and the questions that make me open a new notebook.</p><div class="hero-actions"><a class="text-link primary-link" href="#flagship">Explore work <span aria-hidden="true">↘</span></a><a class="text-link" href="#about">About me <span aria-hidden="true">↗</span></a></div></div>
-    <div class="signal-notebook">
-      <span class="field-scribble">a little closer to the physical world ↙</span>
-      <div class="instrument-head micro"><span>FIELD INSTRUMENT / 01</span><span>WATSON ↗</span></div>
-      <figure class="signal-figure" aria-label="Interactive illustration of a wearable sensor signal">
-        <svg class="signal-diagram" viewBox="0 0 420 190" role="img" aria-labelledby="signal-title"><title id="signal-title">A conceptual wearable connects the body to a readable signal</title><defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 5L5 0" stroke="#7f9e8738" stroke-width="1"/></pattern></defs><path d="M102 45L148 23L288 63L241 87Z M102 45L102 92L241 138L241 87 M241 87L288 63L288 111L241 138" fill="url(#hatch)" stroke="#50775c" stroke-width="1.2"/><path d="M122 80L162 62L267 93L226 114Z M122 80L122 120L226 154L226 114 M226 114L267 93L267 135L226 154" fill="#f0f2e8" fill-opacity=".75" stroke="#50775c" stroke-width="1.2"/><path d="M102 45L122 80 M241 87L226 114 M288 63L267 93" stroke="#72907a" stroke-dasharray="3 4"/><path d="M162 62L177 38L221 51L215 78Z" fill="#12665b" fill-opacity=".12" stroke="#12665b"/><path d="M184 52h8l4-7 6 15 4-7h8" fill="none" stroke="#12665b" stroke-width="1.3"/><circle cx="184" cy="106" r="5" fill="#bd673d"/><path d="M180 108L83 144H26 M260 74L330 38h66 M226 146l46 29h103" fill="none" stroke="#718b76" stroke-width=".8"/><text x="26" y="159">BODY → SENSOR</text><text x="312" y="28">TWO-PART ENCLOSURE</text><text x="277" y="167">READ · INTERPRET</text><path d="M30 24h14m-7-7v14 M378 116h14m-7-7v14" stroke="#829784"/></svg>
-        <div class="wave-box"><svg id="hero-wave" viewBox="0 0 420 98" role="img" aria-label="Illustrative heart-rate waveform"><path d="M0 49H420 M105 5V93 M210 5V93 M315 5V93" fill="none" stroke="#9caf9d" stroke-width=".6" stroke-dasharray="3 5"/><path id="wave-path" d="M0 50H35L42 42L49 51H64L70 58L76 15L82 79L89 49H122L131 39L143 50H180L190 43L198 50H212L218 57L224 15L230 78L237 49H270L281 39L293 50H330L340 44L350 50H366L372 59L378 15L384 79L391 49H420" fill="none" stroke="#0c625b" stroke-width="1.8"/><line id="wave-cursor" x1="210" y1="5" x2="210" y2="93" stroke="#aa4b28" stroke-width="1"/><circle id="wave-dot" cx="210" cy="49" r="4" fill="#aa4b28"/></svg></div>
-        <figcaption class="sr-only">Select a sensor channel, then move the sample cursor to explore its illustrative waveform.</figcaption>
-      </figure>
-      <div class="signal-controls"><div class="channel-list" role="group" aria-label="Signal channel"><button type="button" class="tab-button" data-signal="heart" aria-pressed="true">01 Heart rate</button><button type="button" class="tab-button" data-signal="muscle" aria-pressed="false">02 Muscle</button><button type="button" class="tab-button" data-signal="temperature" aria-pressed="false">03 Temp.</button></div><p class="signal-caption" id="signal-caption" aria-live="polite">A pulse becomes a signal. The first step is making it readable.</p><div class="range-row"><label for="sample">Sample cursor</label><input type="range" id="sample" min="0" max="100" value="50"><output for="sample" id="sample-value">50%</output></div><div class="instrument-foot micro"><span>ILLUSTRATIVE TRACE · NOT RECORDED DATA</span><a href="#wearable" aria-label="Read the WATSON wearable project">Open notes ↗</a></div></div>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top">
+    <div class="hero-dots" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-lamp" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="kicker"><span>Olivia Ahn</span><span>Computer Engineering</span><span>Michigan State University</span></p>
+      <h1 class="headline" aria-label="I build things to understand how they work.">
+        <span class="ln" aria-hidden="true">I build</span>
+        <span class="ln" aria-hidden="true"><a class="slot" id="slot" href="#arm" tabindex="-1"><span class="w">robot arms</span></a></span>
+        <span class="ln soft" aria-hidden="true">to understand</span>
+        <span class="ln" aria-hidden="true">how they work.</span>
+      </h1>
+      <div class="hero-foot">
+        <p class="intro">I'm most interested in the layer where the physical world turns into data: <b>sensors, robots, and simulations</b>. Almost everything on this page runs live, so try it.</p>
+        <ol class="index">
+          <li><a href="#arm"><span class="n">2020</span><span class="t">Robot arm for COVID testing</span><span class="k">pneumatics</span></a></li>
+          <li><a href="#shark"><span class="n">2023</span><span class="t">Shark evolution</span><span class="k">genetic algorithm</span></a></li>
+          <li><a href="#wearable"><span class="n">2023</span><span class="t">Three-signal wearable</span><span class="k">Arduino · sensors</span></a></li>
+          <li><a href="#stars"><span class="n">2022</span><span class="t">Why stars come in pairs</span><span class="k">n-body physics</span></a></li>
+          <li><a href="#lab"><span class="n">+4</span><span class="t">Small builds</span><span class="k">lab</span></a></li>
+        </ol>
+      </div>
     </div>
-  </div>
-  <div class="hero-foot micro"><p>Raised between Korea and the U.S. · Thinking in two languages, building across disciplines.</p><span class="index-ref">SIX YEARS OF ASKING “WHAT IF?” ↓</span></div>
-</section>
-<section class="work" id="flagship" aria-labelledby="work-title">
-  <div class="shell"><div class="section-top"><span class="eyebrow teal">01 / Selected investigations</span><div><h2 id="work-title">Three problems<br>I went too deep on.</h2><p>Different scales. The same impulse: build a system, look closely, and see what the model has to say.</p></div></div>
-  <article class="project" id="sharks" aria-labelledby="shark-title">
-    <div class="project-topline"><span class="project-index teal">01</span><span class="eyebrow">Shark evolution / Genetic algorithm</span><span class="eyebrow project-type">SIMULATION</span></div>
-    <div class="project-heading"><h3 id="shark-title">An ocean of<br><em>what-ifs.</em></h3><p>What might a changing ocean ask of a shark?<br>We translated habitat, body structure, and feeding into a population that could inherit, mutate, and survive.</p></div>
-    <div class="evolution-board"><figure><div class="population-header micro"><span>POPULATION STUDY</span><span>SIZE / SPEED / FERTILITY</span></div><svg class="population-svg" viewBox="0 0 650 245" role="img" aria-labelledby="population-title"><title id="population-title">Conceptual shark population responding to prey conditions</title><defs><pattern id="population-grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" stroke="#6a927023" fill="none"/></pattern><path id="shark-shape" d="M-44 0C-20-14 12-12 34-3L49-14L43 0L50 13L33 6C17 14-9 13-27 7L-40 14L-34 5L-48 2Z M-7-10L4-26L12-10 M2 10L14 22L17 9"/></defs><rect width="650" height="245" fill="url(#population-grid)"/><g id="shark-population" fill="#366d53" stroke="#224d37" stroke-width=".6"><use href="#shark-shape" transform="translate(80 70) scale(.8)"/><use href="#shark-shape" transform="translate(230 75) scale(.7)"/><use href="#shark-shape" transform="translate(390 70) scale(.9)"/><use href="#shark-shape" transform="translate(550 75) scale(.7)"/><use href="#shark-shape" transform="translate(150 170) scale(.8)"/><use href="#shark-shape" transform="translate(320 165) scale(.7)"/><use href="#shark-shape" transform="translate(490 165) scale(.8)"/></g></svg><figcaption class="chart-note"><span>HEREDITY → VARIATION → SELECTION</span><span>Conceptual population</span></figcaption></figure><div class="evolution-readout"><span class="eyebrow teal">Change the food conditions</span><div class="channel-list" role="group" aria-label="Prey conditions"><button type="button" class="tab-button" data-prey="abundant" aria-pressed="true">Abundant, fast prey ↗</button><button type="button" class="tab-button" data-prey="scarce" aria-pressed="false">Scarce, slow prey ↗</button></div><p id="evolution-result" aria-live="polite">Smaller. Slower.<br>A body plan for avoiding predators.</p><span class="micro muted">Illustration of reported model outcomes. Switch conditions to compare.</span></div></div>
-    <div class="stats" aria-label="Shark research at a glance"><div class="stat"><strong>15</strong><span>ecomorphotypes<br>classified</span></div><div class="stat"><strong>~80</strong><span>pages in the<br>final report</span></div><div class="stat"><strong>3</strong><span>future-ocean<br>scenarios modeled</span></div></div>
-    <div class="project-bottom"><p class="credits"><strong>In-school research program</strong><br>Selected as outstanding work<br>With <span lang="ko">박선형</span> &amp; <span lang="ko">박지유</span></p><div class="process"><div><h4>01 / Observe</h4><p>Classify habitat, fins, teeth, and diet into ecomorphotypes.</p></div><div><h4>02 / Model</h4><p>Inherit size, speed, and fertility; introduce random mutation.</p></div><div><h4>03 / Question</h4><p>Compare feeding and survival under changing ocean conditions.</p></div></div></div>
-    <details class="research-notes"><summary><span>Inside the model / methods, findings &amp; context</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="notes-body"><p>
-        Ocean ecosystems are changing under climate change at least as fast as
-        land ecosystems, but they're studied far less &mdash; mostly because
-        they're so much harder to observe directly. We picked sharks as a
-        tractable way in: a predator that sits in food chains across almost
-        every marine environment.
-      </p>
-<p>
-        We classified sharks into <strong>15 ecomorphotypes</strong> by
-        habitat, fin structure, tooth shape, and diet, then wrote a genetic
-        algorithm &mdash; diversity, heredity, selection, reproduction,
-        crossover, mutation &mdash; that evolves a population of
-        <span class="mono">shark_survivor</span> objects. Size, speed, and
-        fertility are inherited from surviving parents with random mutation;
-        objects die on predator collision and gain fitness from feeding.
-      </p>
-<p>
-        Under abundant, fast prey, the simulation converged on smaller,
-        slower sharks &mdash; a predator-avoidance body plan. Under scarce,
-        slow prey, it converged on longer sharks that circle in place while
-        feeding, similar to a whale shark's oversized mouth. We then fed in
-        projected ocean acidification, warming, and microplastic scenarios,
-        and the model predicted a shift toward that second, feeding-optimized
-        body type as prey grows scarcer.
-      </p>
-<p class="note-line">This started as a standard in-school research assignment that didn't really call for this much rigor &mdash; we just kept going.</p></div></details>
-  </article>
-  <article class="project" id="wearable" aria-labelledby="wearable-title">
-    <div class="project-topline"><span class="project-index orange">02</span><span class="eyebrow">WATSON / Wearable medical device</span><span class="eyebrow project-type">HARDWARE</span></div>
-    <div class="wearable-grid"><div class="wearable-copy"><h3 id="wearable-title">The body speaks.<br><em>Build a way<br>to listen.</em></h3><p>Heart rate, muscle activity, and temperature: three signals brought together in an Arduino wearable, with an enclosure that clips onto the forearm.</p><div class="small-stats"><div class="stat"><strong>3</strong><span>sensor types fused</span></div><div class="stat"><strong>12</strong><span>people, co-led</span></div><div class="stat"><strong>1st</strong><span>club academic festival</span></div></div><p class="credits"><strong>WATSON Biomedical Engineering Club</strong><br>Co-president · Joint forum with LEADERS</p></div>
-    <div><figure class="circuit-board"><div class="eyebrow">From physical signal to readable output</div><svg viewBox="0 0 540 260" role="img" aria-labelledby="circuit-title"><title id="circuit-title">Heart-rate, EMG, and TMP36 sensors connect through Arduino to an LCD and green/red LEDs</title><g fill="none" stroke="#d2d5c8"><path d="M15 15H525V245H15Z" stroke-dasharray="3 5"/><path d="M153 61H204V130H240 M153 130H240 M153 199H204V130H240 M348 130H386V82H426 M386 130V195H426" stroke-width="1.5"/></g><path id="circuit-path" d="M153 61H204V130H240 M348 130H386V82H426 M386 130V195H426" fill="none" stroke="#aa4b28" stroke-width="2"/><g fill="#f8f7f0" stroke="#9da994"><rect id="sensor-heart" x="28" y="36" width="125" height="50"/><rect id="sensor-muscle" x="28" y="105" width="125" height="50"/><rect id="sensor-temperature" x="28" y="174" width="125" height="50"/></g><g fill="#535f53" font-size="11"><text x="41" y="56">HEART RATE</text><text x="41" y="73" font-size="9">AD8232</text><text x="41" y="126">MUSCLE SIGNAL</text><text x="41" y="142" font-size="9">EMG</text><text x="41" y="195">TEMPERATURE</text><text x="41" y="212" font-size="9">TMP36</text></g><rect x="240" y="80" width="108" height="100" fill="#eee5d9" stroke="#8e7058"/><g stroke="#8e7058"><path d="M249 72v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8M249 180v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8m12-8v8"/></g><text x="294" y="126" text-anchor="middle" fill="#674f3e" font-size="12">ARDUINO</text><text x="294" y="147" text-anchor="middle" fill="#674f3e" font-size="9">READ / FLAG</text><rect x="426" y="59" width="89" height="46" fill="#e3eadb" stroke="#738464"/><text x="470" y="87" text-anchor="middle" fill="#4c6342" font-size="11">LCD</text><circle cx="439" cy="195" r="10" fill="#327c55"/><circle cx="482" cy="195" r="10" fill="#b85a48"/><text x="462" y="223" text-anchor="middle" fill="#535f53" font-size="9">STATUS LEDs</text></svg><figcaption class="micro muted">SIGNAL FLOW · CONCEPTUAL SCHEMATIC</figcaption><div class="channel-list" role="group" aria-label="Explore the wearable sensors"><button type="button" class="tab-button" data-sensor="heart" aria-pressed="true">Heart rate</button><button type="button" class="tab-button" data-sensor="muscle" aria-pressed="false">Muscle signal</button><button type="button" class="tab-button" data-sensor="temperature" aria-pressed="false">Temperature</button></div><p class="sensor-note" id="sensor-note" aria-live="polite">AD8232 · The heart-rate channel feeds into Arduino, alongside muscle and temperature inputs. An LCD and green/red LEDs make the readings visible.</p></figure>
-    <div class="wearable-principles"><div><h4>MAKE IT WEARABLE</h4><p>Fusion 360 → FDM printing → a two-part enclosure that clips on without a fastener.</p></div><div><h4>TAKE IT BEYOND THE BENCH</h4><p>Present a working prototype, then work through its positioning with the school’s business club.</p></div></div></div></div>
-    <details class="research-notes"><summary><span>Build notes / components, enclosure &amp; team</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="notes-body"><p>
-        As co-president of WATSON, our school's biomedical engineering club, I
-        helped build a wearable combining a <strong>PPG heart-rate sensor</strong>
-        (AD8232), an <strong>EMG muscle-signal sensor</strong>, and a
-        <strong>TMP36 temperature sensor</strong> &mdash; all read through
-        Arduino and flagged as normal or abnormal on green/red LEDs and an
-        LCD readout.
-      </p>
-<p>
-        I designed and 3D-printed the arm-worn enclosure in Fusion 360 using
-        FDM printing, splitting it into two halves so it clips onto the
-        forearm without a fastener. We then presented the device alongside
-        LEADERS, the school's business club, in a joint forum &mdash; not
-        just demoing it as a working prototype, but arguing through how it
-        could actually be positioned and sold.
-      </p>
-<p>The project won first place at the club's own academic festival.</p></div></details>
-  </article></div>
-  <article class="star-section" id="stars" aria-labelledby="stars-title"><div class="shell">
-    <div class="project-topline"><span class="project-index">03</span><span class="eyebrow">Binary-star research / Computational physics</span><span class="eyebrow project-type">OBSERVATION</span></div>
-    <div class="star-layout"><div class="star-copy"><h3 id="stars-title">Even stars<br>have <em>company.</em></h3><p>Why does the night sky have more couples than singles? We started with a constellation survey, then built Python simulations to explore the gravity underneath the pattern.</p><div class="survey"><div class="survey-label"><strong>101</strong><span>STARS CATALOGUED<br>25+ WINTER CONSTELLATIONS</span></div><div class="survey-bar" role="img" aria-label="Survey distribution: 43 percent binary systems, 38 percent single-star systems, 19 percent triple or more"><span></span><span></span><span></span></div><div class="survey-legend"><span><b>43%</b>Binary</span><span><b>38%</b>Single</span><span><b>19%</b>Triple or more</span></div></div></div>
-    <figure class="orbit-figure"><div class="orbit-top micro"><span>ORBITAL SKETCH / TWO BODIES</span><span>01 ↔ 02</span></div><svg class="orbit-svg" viewBox="0 0 490 292" role="img" aria-labelledby="orbit-title"><title id="orbit-title">Two equal-mass stars on opposite sides of their shared center of mass</title><path d="M38 146H452M245 22V270" stroke="#647c704c" stroke-dasharray="4 5"/><ellipse cx="245" cy="146" rx="158" ry="94" fill="none" stroke="#91a992" stroke-width="1"/><ellipse cx="245" cy="146" rx="162" ry="97" fill="none" stroke="#91a992" stroke-width=".5" stroke-dasharray="2 7"/><line id="star-link" x1="381.8" y1="193" x2="108.2" y2="99" stroke="#a4b7a8" stroke-width=".7" stroke-dasharray="4 5"/><path d="M239 146H251M245 140V152" stroke="#e5eadd"/><text x="254" y="134" fill="#a9baaa" font-size="9">CENTER OF MASS</text><g id="star-a" transform="translate(381.8 193)"><circle r="17" fill="none" stroke="#b7d8b344"/><circle r="9" fill="#bddab6"/><text x="20" y="4" fill="#cde2c5">A</text></g><g id="star-b" transform="translate(108.2 99)"><circle r="17" fill="none" stroke="#d8a57844"/><circle r="9" fill="#d8a578"/><text x="-28" y="4" fill="#e3bd94">B</text></g><text x="22" y="268" fill="#8fa796">GRAVITY CONNECTS THE PAIR</text></svg><div class="range-row"><label for="orbit-phase">Orbital phase</label><input id="orbit-phase" type="range" min="0" max="360" value="30" step="1"><output for="orbit-phase" id="orbit-value">30°</output></div><figcaption>Move the phase to follow a pair around its shared center. Idealized equal-mass circular orbit, shown in projection; an explanatory sketch.</figcaption></figure></div>
-    <div class="star-bottom"><p class="credits"><strong><span lang="ko">전산물리학 ET</span> · School academic festival</strong><br>With <span lang="ko">조신우</span> · Python / VPython<br>Single, binary, and triple-star n-body simulations</p><p class="editorial">“Why are there more couples than singles up there?”<br><span class="micro" style="font-style:normal;color:#b6c4bc">THE FESTIVAL AUDIENCE FOUND THIS FUNNIER THAN WE EXPECTED.</span></p></div>
-    <details class="research-notes"><summary><span>Observation notes / survey, physics &amp; presentation</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="notes-body"><p>
-        We catalogued 101 stars across 25+ winter constellations by how many
-        stars share their system &mdash; single, binary, or higher multiples
-        &mdash; and found single-star systems are actually the minority:
-        about 38% single versus 43% binary and 19% triple-or-more.
-      </p>
-<p>
-        Then we explained the pattern with physics instead of just leaving it
-        as a statistic. Using Python (VPython), we built n-body gravity
-        simulations of single, binary, and triple-star systems, tracking
-        kinetic, potential, and mechanical energy to confirm conservation and
-        show that triple-plus systems are dynamically unstable unless their
-        mass ratios are almost exactly balanced &mdash; which is why they're
-        so much rarer. We traced the pattern back to star formation itself:
-        an early collapsing gas cloud rarely settles into one single point,
-        which favors binaries from the start.
-      </p>
-<p>We presented it as a two-part school festival talk, with a fair amount of "why are there more couples than singles up there" framing that our audience found funnier than we expected.</p></div></details>
-  </div></article>
-</section>
-<section class="about shell" id="about" aria-labelledby="about-title"><div class="about-grid"><div><span class="eyebrow teal">02 / The person behind the notebook</span><h2 id="about-title">Curiosity is<br>a hands-on thing.</h2><p class="opening-note">Korea and the U.S.<br>Two languages. Many ways<br>to ask the same question.</p><aside class="slow-note"><div class="eyebrow">A note on slow thinking</div><p>During my CSAT year: no phone, no internet searches in study sessions. Just textbooks and re-deriving things until a pattern clicked. One calculus problem took over thirty minutes. That was the point.</p></aside></div><div class="about-body"><p>I grew up between the United States and Korea and think comfortably in both languages. Across the things I build, I keep coming back to the place where <strong>something physical becomes something a computer can understand.</strong></p><p>I chose <strong>Computer Engineering over Computer Science</strong> on purpose. If AI eventually writes most of the code itself, I’m interested in the physical layer humans and AI use to talk: sensors, actuators, interfaces. It connects a pandemic-era robot arm to a wearable biosensor, and it’s why I’ve been circling optics lately.</p><p>I’m a <strong>first-year at Michigan State University</strong>, most drawn to how autonomous systems sense and react to the world: the moment a robot turns raw signals into a decision. Outside coursework, I've tutored math and English and taught myself whatever a project needed.</p><p>That year of slow thinking taught me to value a good question over a quick answer. It became the design brief behind <a href="#product">Edu Pointer</a>, and it still shapes how I approach a new problem.</p><ul class="tags" aria-label="Areas of interest"><li>ROBOTICS</li><li>EMBEDDED SYSTEMS</li><li>AI / AUTONOMOUS SYSTEMS</li><li>OPTICS</li><li>ALGORITHMS &amp; SIMULATION</li></ul></div></div></section>
-<section class="timeline" id="timeline" aria-labelledby="log-title"><div class="shell"><div class="log-heading"><div><span class="eyebrow teal">03 / An ongoing experiment</span><h2 id="log-title">The notebook index.</h2><p class="muted" style="font-size:13px;margin-top:13px">From a robot arm at fourteen to the next question. Open any entry.</p></div><button class="quiet-button" id="expand-log" type="button" aria-expanded="false" aria-controls="log-entries">Expand all +</button></div><div id="log-entries"><details class="log-entry"><summary><span class="log-date">Age 14</span><span class="log-title">Robot Arm for Contactless COVID Testing</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>Watched nurses' faces break out from wearing PPE for entire shifts during PCR testing and tried to build a pneumatic robot arm to do the job instead &mdash; iterating gripper design and material until it could lift 100&times; its original capacity.</p><p class="log-reflection">What stayed with me: planning something and getting it to work are very different experiences.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">Age 15</span><span class="log-title">Noise-Detecting Etiquette Lamp</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>An Arduino sound sensor built into a repurposed candle holder, made to show sound the way a clock shows time &mdash; submitted to an invention contest.</p><p class="log-reflection">A project can ask for more than I already know. Learning what it needs is part of the work.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school &middot; Age 16</span><span class="log-title">Star System Simulation</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>N-body gravity simulations and a constellation survey explaining why binary star systems outnumber single ones. <a href="#stars">Open the field notes ↗</a></p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school &middot; Age 16</span><span class="log-title">Classroom Seat-Assignment Program</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>A Python script that reshuffled 36 seats each round without repeating anyone's front, back, or side seat twice in a row &mdash; written after gaining enough confidence in Python to fix a real complaint.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school</span><span class="log-title">Roller Coaster Fear Research</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>An informal project with friends: a VR experiment on why some seats feel scarier than others, backed by the physics of why the back row hits top speed first off the initial drop.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school &middot; Age 17</span><span class="log-title">Molecules Club</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>Learned to analyze molecular structure at the atomic scale using ORCA and Avogadro.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school &middot; Age 17</span><span class="log-title">Shark Evolution Genetic Algorithm</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>An 80-page research program modeling shark evolution under future ocean conditions. <a href="#sharks">Open the field notes ↗</a></p></div></details>
-<details class="log-entry"><summary><span class="log-date">High school &middot; Age 17</span><span class="log-title">WATSON Wearable Device</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>A sensor-fused wearable built and co-led with a 12-person biomedical engineering club team. <a href="#wearable">Open the field notes ↗</a></p></div></details>
-<details class="log-entry"><summary><span class="log-date">Age 18</span><span class="log-title">Focused Entirely on the College Entrance Exam</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>No side projects this year &mdash; by design, not by accident.</p></div></details>
-<details class="log-entry"><summary><span class="log-date">2025 &middot; Age 19</span><span class="log-title">Gap Year, Digital Detox, and Edu Pointer</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>Prepped for the CSAT without a phone, then joined Edu Pointer, a math app built around the same idea &mdash; make students think before handing them the answer. <a href="#product">See Product &amp; Design ↗</a></p></div></details>
-<details class="log-entry"><summary><span class="log-date">2026 &middot; Age 20</span><span class="log-title">Daechi Wasong Academy Website</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>Designed a multi-page site for a CSAT-retake academy in Seoul, live at daechiwasong.com. <a href="#product">See Product &amp; Design ↗</a></p></div></details>
-<details class="log-entry"><summary><span class="log-date">2026</span><span class="log-title">Started Computer Engineering at Michigan State University</span><span class="disclosure" aria-hidden="true">+</span></summary><div class="log-body"><p>Currently a freshman in MSU.</p></div></details></div></div></section>
-<section class="product" id="product" aria-labelledby="product-title"><div class="shell"><div class="section-top"><span class="eyebrow">04 / Product &amp; Design</span><div><h2 id="product-title">The human side<br>of making things.</h2><p>Sometimes my contribution is a better question, a clearer interface, or a tool someone can keep using on their own.</p></div></div><div class="product-list"><article class="product-item"><span class="product-number" aria-hidden="true">i.</span><div><span class="credits mono">MATH EDUCATION APP / CORE TEAM MEMBER, PRODUCT / SEPT 2025–</span><h3>Edu Pointer</h3><p>My phone-free CSAT year became a product brief: give students room to think. Edu Pointer breaks problems into steps, checks understanding at each one, and offers a guiding question when you’re stuck.</p><div class="learning-flow" aria-label="Learning flow: Think, reflect, then continue"><span>Think</span><span aria-hidden="true">→</span><span>Reflect</span><span aria-hidden="true">→</span><span>Then continue.</span></div><p>I used the app as an actual test-taker preparing for the exam. Most of its features came from requests I made from that seat. I specified what I needed; the engineering team built it.</p><div class="product-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 19L6 14L17 3L21 7L10 18Z M6 14L10 18M4 21H21"/></svg>Contribution: product direction through lived experience.</div></div></article><article class="product-item"><span class="product-number" aria-hidden="true">ii.</span><div><span class="credits mono">ACADEMY WEBSITE / DESIGN / 2026</span><h3>Daechi Wasong Academy</h3><p>A part-time design project for a CSAT-retake academy (<span lang="ko">재수학원</span>) in Daechi, Seoul. I created the layout, visual identity, and most page content across the homepage, faculty profiles, admissions section, and Q&amp;A board, responsive from phone to desktop.</p><p>I used an academy website platform so the director could keep the site updated independently. Designing for the person who maintains it was part of designing the website.</p><a class="text-link" href="http://www.daechiwasong.com/main/main.html" target="_blank" rel="noopener noreferrer">Visit the academy website <span aria-hidden="true">↗</span><span class="sr-only">(opens in a new tab)</span></a></div></article></div></div></section>
-<section class="contact shell" id="contact" aria-labelledby="contact-title"><div class="contact-layout"><div><span class="eyebrow teal">05 / The next page is open</span><h2 id="contact-title">Have a question<br>worth <em>building for?</em></h2></div><div class="contact-side"><p>I’m open to internship conversations, Questions about Education in Korea, or just talking through a robotics idea.</p><a class="email-link" href="mailto:ahnolivi@msu.edu">ahnolivi@msu.edu <span aria-hidden="true">↗</span></a></div></div><footer class="footer"><p class="footer-name">OLIVIA AHN / ENGINEERING FIELD NOTES</p><p>COMPUTER ENGINEERING · MICHIGAN STATE UNIVERSITY</p><a href="#hero">Back to top ↑</a></footer></section>
+  </section>
+
+  <!-- ================= ORIGIN: ROBOT ARM ================= -->
+  <section class="sec" id="arm">
+    <div class="wrap">
+      <div class="case-head">
+        <p class="label">Where it started &middot; 2020 &middot; Age 14 &middot; Science competition finalist, physics</p>
+        <h2 class="case-title">A robot arm for nurses</h2>
+        <div class="case-side">
+          <p class="case-lede">During COVID testing, nurses wore protective gear for whole shifts and got sores on their faces. I built a pneumatic arm that could hold the swab instead, then tested grippers and piston fluids until it was strong enough.</p>
+          <ul class="facts">
+            <li><b>21&rarr;204.6</b>grams lifted</li>
+            <li><b>~10&times;</b>stronger grip</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-grid">
+          <div class="stage">
+            <canvas id="arm-bench" aria-label="Interactive robot arm. Move the pointer to steer it and hold to close the gripper."></canvas>
+            <p class="hint" id="arm-hint">Move to steer &middot; hold to grip</p>
+          </div>
+          <div class="panel">
+            <div class="ctl">
+              <span class="lbl">Gripper &amp; piston setup</span>
+              <div class="seg" id="arm-config" role="group" aria-label="Gripper and piston setup">
+                <button type="button" data-cap="21" aria-pressed="true">Wood<br>air</button>
+                <button type="button" data-cap="96.6" aria-pressed="false">Clay<br>grip</button>
+                <button type="button" data-cap="204.6" aria-pressed="false">Clay<br>oil</button>
+              </div>
+            </div>
+            <div class="cap">
+              <span class="lbl label">Grip capacity</span>
+              <div class="cap-bar" aria-hidden="true"><span id="cap-fill"></span><em id="cap-mark"></em></div>
+              <p class="cap-txt" id="cap-txt" aria-live="polite"></p>
+            </div>
+            <p class="cap-txt">Iterations in the original: 3&rarr;4 fingers, new joints, five grip materials (wood, vinyl, rubber, bandage, clay) and three piston fluids (air, water, oil).</p>
+          </div>
+        </div>
+        <div class="demo-foot"><span>Capacities are the measured results from the original tests.</span><span>Simplified 2-joint model</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SELECTED WORK ================= -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Selected work</p>
+        <h2>Three problems I went too deep on</h2>
+        <p>An algorithm, a piece of hardware, and a physics simulation. Each one runs below.</p>
+      </div>
+
+      <!-- SHARK -->
+      <article class="case" id="shark">
+        <div class="case-head">
+          <p class="label">2023 &middot; Age 17 &middot; In-school research program &middot; with 박선형, 박지유</p>
+          <h3 class="case-title">What does a changing ocean do to a shark?</h3>
+          <div class="case-side">
+            <p class="case-lede">We sorted sharks into 15 ecomorphotypes, then wrote a genetic algorithm to see which body plans survive different food conditions. Set the ocean and let it evolve.</p>
+            <ul class="facts">
+              <li><b>15</b>ecomorphotypes</li>
+              <li><b>~80</b>page report</li>
+              <li><b>&#9733;</b>outstanding work</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo">
+          <div class="demo-grid">
+            <div class="stage">
+              <canvas id="shark-ocean" aria-label="Shark population swimming. Body length shows the size gene, color shows the speed gene."></canvas>
+              <p class="hint" id="shark-gen">Generation 0</p>
+              <canvas id="shark-chart" aria-label="Average body size and swim speed across generations"></canvas>
+            </div>
+            <div class="panel">
+              <div class="ctl">
+                <span class="lbl">Ocean presets</span>
+                <div class="seg" id="shark-preset" role="group" aria-label="Ocean presets">
+                  <button type="button" data-prey="260" data-speed="1.8" aria-pressed="true">Lots of<br>fast prey</button>
+                  <button type="button" data-prey="12" data-speed="0.3" aria-pressed="false">Scarce<br>slow prey</button>
+                </div>
+              </div>
+              <div class="ctl">
+                <div class="ctl-top"><label for="shark-food">Food</label><output id="shark-food-out">260 prey</output></div>
+                <input id="shark-food" type="range" min="10" max="300" step="2" value="260">
+              </div>
+              <div class="ctl">
+                <div class="ctl-top"><label for="shark-pspeed">Prey speed</label><output id="shark-pspeed-out">1.8</output></div>
+                <input id="shark-pspeed" type="range" min="0.2" max="2" step="0.1" value="1.8">
+              </div>
+              <div class="row">
+                <button class="btn solid" id="shark-run" type="button">Pause</button>
+                <button class="btn" id="shark-skip" type="button">+20 gens</button>
+                <button class="btn" id="shark-reset" type="button">Reset</button>
+              </div>
+              <dl class="readout">
+                <div><dt>Body size</dt><dd id="shark-s">1.55<small></small></dd></div>
+                <div><dt>Swim speed</dt><dd id="shark-v">1.10<small></small></dd></div>
+              </dl>
+              <p class="verdict" id="shark-verdict" aria-live="polite">Watch the averages move.</p>
+              <div class="legend"><span><i style="background:var(--chrome)"></i>size</span><span><i style="background:var(--cobalt)"></i>speed</span><span><i style="background:var(--alarm)"></i>predator</span></div>
+            </div>
+          </div>
+          <div class="demo-foot"><span>Browser re-creation of the idea, not the original code. Each shark inherits size and speed from two parents, with mutation.</span><span>48 sharks / generation</span></div>
+        </div>
+
+        <details class="more">
+          <summary>What the original project found</summary>
+          <div class="body">
+            <p>We classified sharks by habitat, size, diet and teeth, and checked how fin type (aplesodic vs. plesodic) and tooth shape track with prey. The simulation evolved a <b>shark_survivor</b> object that gains HP by eating and dies when it hits a predator.</p>
+            <p>Plentiful, fast prey produced smaller, slower sharks built to avoid predators. Scarce, slow prey produced long sharks that spin in place to feed, much like a whale shark. Abundant prey also produced more distinct species. We then projected <b>acidification, warming and microplastic</b> scenarios forward.</p>
+            <p>The program didn't ask for this much work. We wrote about 80 pages anyway, and it was selected as an outstanding project and presented as a poster.</p>
+          </div>
+        </details>
+      </article>
+
+      <!-- WEARABLE -->
+      <article class="case" id="wearable">
+        <div class="case-head">
+          <p class="label">2023 &middot; Age 17 &middot; WATSON biomedical engineering club &middot; Co&#8209;president</p>
+          <h3 class="case-title">Three body signals, one armband</h3>
+          <div class="case-side">
+            <p class="case-lede">Our 12-person club built an Arduino wearable that reads heart rate, muscle activity and body temperature, and flags anything out of range on LEDs and an LCD.</p>
+            <ul class="facts">
+              <li><b>3</b>sensors</li>
+              <li><b>12</b>person team</li>
+              <li><b>1st</b>club research festival</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo">
+          <div class="demo-grid">
+            <div class="stage fill"><canvas id="wear-traces" aria-label="Live heart, muscle and temperature traces"></canvas></div>
+            <div class="panel">
+              <div class="ctl">
+                <div class="ctl-top"><label for="w-act">Activity</label><output id="w-act-out">rest</output></div>
+                <input id="w-act" type="range" min="0" max="100" value="10">
+                <div class="ends"><span>rest</span><span>sprint</span></div>
+              </div>
+              <div class="ctl">
+                <div class="ctl-top"><label for="w-grip">Grip</label><output id="w-grip-out">relaxed</output></div>
+                <input id="w-grip" type="range" min="0" max="100" value="15">
+                <div class="ends"><span>relaxed</span><span>clenched</span></div>
+              </div>
+              <div class="ctl">
+                <div class="ctl-top"><label for="w-temp">Body temp</label><output id="w-temp-out">36.6 °C</output></div>
+                <input id="w-temp" type="range" min="355" max="400" value="366">
+              </div>
+              <pre class="lcd" id="w-lcd" aria-live="polite">HR  72bpm T36.6C
+EMG 0.21mV    OK</pre>
+              <div class="leds">
+                <span class="led" id="led-hr"><i></i>HR</span>
+                <span class="led" id="led-emg"><i></i>EMG</span>
+                <span class="led" id="led-t"><i></i>TEMP</span>
+              </div>
+              <pre class="code" id="w-code" aria-label="Simplified alarm logic"><span>if (bpm&lt;50 || bpm&gt;120) alarm(HR);</span><span>if (emgRms &gt; 0.80)     alarm(EMG);</span><span>if (tempC  &gt; 37.5)     alarm(TEMP);</span></pre>
+            </div>
+          </div>
+          <div class="demo-foot"><span>Simulated signals. Thresholds are examples, not the club's exact values.</span><span>AD8232 &middot; EMG &middot; TMP36</span></div>
+        </div>
+
+        <details class="more">
+          <summary>More about the build</summary>
+          <div class="body">
+            <p>Heart rate came from a PPG sensor and an <b>AD8232</b> ECG module, muscle activity from an <b>EMG</b> sensor, and temperature from a <b>TMP36</b>. The enclosure is an arm wrap modeled in Fusion 360 and FDM-printed.</p>
+            <p>The club also used Arduino devices to study emotion, comparing heart rate and EEG against sounds and images. We presented the wearable at <b>WATSON &times; LEADERS</b>, a joint forum with the school's business and economics club.</p>
+          </div>
+        </details>
+      </article>
+
+      <!-- STARS -->
+      <article class="case" id="stars">
+        <div class="case-head">
+          <p class="label">2022 &middot; Age 16 &middot; Computational physics club &middot; with 조신우</p>
+          <h3 class="case-title">Why stars come in pairs</h3>
+          <div class="case-side">
+            <p class="case-lede">We surveyed 101 stars across 25+ winter constellations and found single stars are the minority. Then we simulated gravity in Python to see why.</p>
+            <ul class="facts">
+              <li><b>101</b>stars surveyed</li>
+              <li><b>43%</b>binary</li>
+              <li><b>n&#8209;body</b>VPython</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo">
+          <div class="demo-grid">
+            <div class="stage">
+              <canvas id="star-sky" aria-label="Gravity simulation of a star system"></canvas>
+              <p class="hint" id="star-hint">Triple system &middot; 3 equal masses</p>
+              <p class="stage-msg" id="star-msg" hidden></p>
+              <canvas id="star-energy" aria-label="Kinetic, potential and total energy over time"></canvas>
+            </div>
+            <div class="panel">
+              <div class="ctl">
+                <span class="lbl">System</span>
+                <div class="seg" id="star-preset" role="group" aria-label="Star system">
+                  <button type="button" data-p="single" aria-pressed="false">Single</button>
+                  <button type="button" data-p="binary" aria-pressed="false">Binary</button>
+                  <button type="button" data-p="triple" aria-pressed="true">Triple</button>
+                </div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="star-twin" checked> Chaos twin (start 0.001 apart)</label>
+              <div class="row">
+                <button class="btn solid" id="star-run" type="button">Pause</button>
+                <button class="btn" id="star-restart" type="button">Restart</button>
+              </div>
+              <dl class="readout">
+                <div><dt>Time</dt><dd id="star-t">0.0</dd></div>
+                <div><dt>Energy drift</dt><dd id="star-drift">0.000%</dd></div>
+              </dl>
+              <div class="legend"><span><i style="background:var(--cobalt)"></i>kinetic</span><span><i style="background:var(--ochre)"></i>potential</span><span><i style="background:var(--chrome)"></i>total</span></div>
+              <div class="survey">
+                <span class="label">Survey of 101 stars</span>
+                <div class="bar" role="img" aria-label="38 percent single, 43 percent binary, 19 percent triple or more">
+                  <span style="width:38%;background:var(--paper-3)"></span><span style="width:43%;background:var(--chrome)"></span><span style="width:19%;background:var(--ochre)"></span>
+                </div>
+                <div class="legend"><span>38% single</span><span style="color:var(--chrome)">43% binary</span><span style="color:var(--ochre)">19% triple+</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-foot"><span>Leapfrog integrator, G = 1. The total-energy line stays flat even when the orbits go chaotic.</span><span>Softened gravity</span></div>
+        </div>
+
+        <details class="more">
+          <summary>How we explained the survey</summary>
+          <div class="body">
+            <p>A collapsing gas cloud rarely settles into a single point, so pairs are common from the start. Triple systems stay together only when their masses and distances are balanced very precisely. Run the triple above a few times and you'll see why most of them break apart.</p>
+            <p>We built the simulations in <b>VPython</b>, plotted kinetic, potential and mechanical energy to check conservation, and presented the project as a booth at the school's academic festival.</p>
+          </div>
+        </details>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= LAB ================= -->
+  <section class="sec" id="lab">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Lab</p>
+        <h2>Small builds</h2>
+        <p>Shorter projects from middle and high school. Each one had a single idea worth trying.</p>
+      </div>
+
+      <div class="lab-grid">
+        <!-- lamp -->
+        <article class="card" id="lab-lamp">
+          <div class="card-head">
+            <p class="label">2021 &middot; Age 15 &middot; Invention contest</p>
+            <h3>Noise etiquette lamp</h3>
+            <p>Shows sound the way a clock shows time. An Arduino sound sensor inside a reused candle holder, styled like a boombox.</p>
+          </div>
+          <div class="card-body">
+            <div class="lamp-wrap">
+              <div class="lamp" id="lamp" aria-hidden="true">
+                <span class="cap-top"></span><span class="glass"></span><span class="bulb"></span><span class="base"></span><span class="grill"></span>
+                <span class="speech">&#9654; spoken warning</span>
+              </div>
+              <div class="lamp-read">
+                <p class="lvl" id="lamp-lvl" aria-live="polite">Quiet<small>below 40 &middot; lamp off</small></p>
+                <div class="meter" aria-hidden="true"><span id="lamp-meter"></span></div>
+                <div class="ticks" aria-hidden="true"><span style="left:17%">speech 17</span><span style="left:40%">40</span><span style="left:70%">70</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-ctl">
+            <div class="ctl">
+              <div class="ctl-top"><label for="lamp-in">Room noise</label><output id="lamp-out">17</output></div>
+              <input id="lamp-in" type="range" min="0" max="100" value="17">
+            </div>
+          </div>
+        </article>
+
+        <!-- seats -->
+        <article class="card" id="lab-seats">
+          <div class="card-head">
+            <p class="label">2022 &middot; Age 16 &middot; Python</p>
+            <h3>Fair seat shuffler</h3>
+            <p>Built for my class of 36 after too many seat complaints. Nobody keeps their seat, and nobody gets the front or the edges twice in a row.</p>
+          </div>
+          <div class="card-body">
+            <div class="seats-wrap">
+              <div class="board">BOARD</div>
+              <div class="seats" id="seats" aria-label="Classroom seating chart, 6 by 6"></div>
+              <div class="zkey"><span><i style="background:var(--chrome)"></i>front row</span><span><i style="background:var(--cobalt)"></i>side &amp; back</span><span><i style="background:var(--ink-3);outline:1px solid var(--rule)"></i>middle</span><span>color = where they sat last round</span></div>
+            </div>
+          </div>
+          <div class="card-ctl">
+            <div class="row" style="justify-content:space-between;align-items:center">
+              <button class="btn solid" id="seats-go" type="button">Shuffle seats</button>
+              <span class="mono" style="font-size:.78rem;color:var(--paper-3)" id="seats-round">Round 1</span>
+            </div>
+            <ul class="checks" id="seats-checks">
+              <li>No one keeps their seat</li>
+              <li>Front row moves out of the front</li>
+              <li>Side &amp; back seats move inward</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- coaster -->
+        <article class="card" id="lab-coaster">
+          <div class="card-head">
+            <p class="label">High school &middot; Team 크랙 &middot; Physics + VR survey</p>
+            <h3>Why the back seat is scariest</h3>
+            <p>When the last car reaches the top, the rest of the train is already falling and drags it over fast. We derived the speeds and ran a VR drop test with 30 people.</p>
+          </div>
+          <div class="card-body"><canvas id="coaster" aria-label="Roller coaster train going over a hill"></canvas></div>
+          <div class="card-ctl">
+            <div class="ctl-top"><span class="lbl label">Speed as each car crosses the top</span><button class="btn small" id="coaster-go" type="button">Run again</button></div>
+            <div class="speeds" id="speeds" aria-live="polite"></div>
+          </div>
+        </article>
+
+        <!-- molecule -->
+        <article class="card" id="lab-molecule">
+          <div class="card-head">
+            <p class="label">2023 &middot; Age 17 &middot; Molecules club</p>
+            <h3>Thinking in atoms</h3>
+            <p>Learned to build and analyze molecules atom by atom with ORCA and Avogadro. Drag to turn benzene around.</p>
+          </div>
+          <div class="card-body"><canvas id="molecule" aria-label="Rotating benzene molecule, drag to rotate"></canvas></div>
+          <div class="card-ctl"><p class="mono" style="font-size:.76rem;color:var(--paper-3)">C&#8326;H&#8326; &middot; C&ndash;C 1.39 &Aring; &middot; C&ndash;H 1.09 &Aring;</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRODUCT ================= -->
+  <section class="sec" id="product">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Product &amp; design</p>
+        <h2>Where I shaped what got built</h2>
+        <p>I didn't write the code for these two. I brought the user's point of view and the design.</p>
+      </div>
+      <div class="prod-grid">
+        <article class="prod">
+          <p class="label">Math learning app &middot; Product, core team &middot; Sept 2025&ndash;</p>
+          <h3>Edu Pointer</h3>
+          <p>Most study apps show the whole solution at once. Edu Pointer makes you take each step yourself and asks a guiding question when you're stuck. I used it as a real CSAT test-taker and proposed most of its features; the engineers built them.</p>
+
+          <div class="tryit" id="edu">
+            <div class="ctl-top"><span class="label">Try the idea</span><span class="label" id="edu-count">Step 1 of 3</span></div>
+            <div class="steps" aria-hidden="true"><i class="now"></i><i></i><i></i></div>
+            <p class="problem">Find the minimum value of <em>f(x) = x&sup2; &minus; 6x + 11</em>.</p>
+
+            <div class="step" data-step="1">
+              <p class="q">Which form shows the minimum directly?</p>
+              <div class="choices">
+                <button type="button" data-ok="0">Factored form: (x &minus; a)(x &minus; b)</button>
+                <button type="button" data-ok="1">Vertex form: (x &minus; p)&sup2; + q</button>
+                <button type="button" data-ok="0">Plug in x = 0</button>
+              </div>
+            </div>
+
+            <div class="step" data-step="2" hidden>
+              <p class="q">Complete the square.</p>
+              <div class="fill">x&sup2; &minus; 6x + 11 = (x &minus; <input id="edu-p" inputmode="numeric" aria-label="p"> )&sup2; + <input id="edu-q" inputmode="numeric" aria-label="q"> <button class="btn small" type="button" id="edu-check2">Check</button></div>
+            </div>
+
+            <div class="step" data-step="3" hidden>
+              <p class="q">So the minimum value is&hellip;</p>
+              <div class="fill">min = <input id="edu-m" inputmode="numeric" aria-label="minimum value"> at x = <input id="edu-x" inputmode="numeric" aria-label="x value"> <button class="btn small" type="button" id="edu-check3">Check</button></div>
+            </div>
+
+            <div class="guide" id="edu-guide" hidden><b>HINT</b><span id="edu-guide-txt"></span></div>
+
+            <div class="locked">
+              <span id="edu-lock">&#128274; Full solution unlocks after step 3</span>
+              <button class="btn small" type="button" id="edu-reset">Start over</button>
+            </div>
+            <div class="solution" id="edu-solution" hidden>
+              <span>x&sup2; &minus; 6x + 11</span>
+              <span>= (x&sup2; &minus; 6x + 9) + 2</span>
+              <span>= (x &minus; 3)&sup2; + 2 &ge; 2</span>
+              <span style="color:var(--chrome)">minimum 2, at x = 3</span>
+            </div>
+          </div>
+          <p class="mono" style="font-size:.72rem;color:var(--paper-3)">Concept demo written for this page. Not the real app.</p>
+        </article>
+
+        <article class="prod">
+          <p class="label">Website design &middot; Part-time &middot; 2026</p>
+          <h3>Daechi Wasong Academy</h3>
+          <p>A site for a CSAT-retake academy in Daechi, Seoul. It runs on an academy-site platform so the director can update it himself. I designed the layout, visuals, copy and page structure.</p>
+          <ul class="chips">
+            <li>Home</li><li>About &amp; facilities</li><li>Teachers</li><li>1:1 curriculum</li><li>Admissions</li><li>Q&amp;A</li>
+          </ul>
+          <p>Responsive from phone to desktop.</p>
+          <a class="btn" href="http://www.daechiwasong.com/main/main.html" target="_blank" rel="noopener" style="justify-self:start">Visit daechiwasong.com &#8599;</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">About</p>
+        <h2>Two countries, one habit: take it apart</h2>
+      </div>
+      <div class="about-grid">
+        <div>
+          <div class="prose">
+            <p>I grew up between the US and Korea and work in both English and Korean. I chose <b>Computer Engineering over CS</b> on purpose. If AI writes more of the code, the interesting problem is the hardware people and AI use to reach each other. Lately that has me reading about <b>optics</b>.</p>
+            <p>I've also tutored math and English, which taught me to explain things in more than one way.</p>
+          </div>
+          <ul class="chips">
+            <li>Robotics</li><li>Embedded systems</li><li>AI &amp; autonomous systems</li><li>Optics</li><li>Simulation</li>
+          </ul>
+          <div class="nowlist">
+            <p class="label">Now &middot; Fall 2026</p>
+            <ul>
+              <li><span><b>MSU Formula Racing Team</b>, electrical subteam. Learning Altium for PCB design.</span></li>
+              <li><span><b>Campus night safety map</b>, a class group project on which paths are well lit.</span></li>
+            </ul>
+          </div>
+        </div>
+        <aside class="note">
+          <p class="label">How I think</p>
+          <h3>A year without instant answers</h3>
+          <p>Before the CSAT I studied a full year with no phone and no search. Just textbooks and re-deriving ideas until they clicked. Some problems took thirty minutes, and that was the point.</p>
+          <p>It's why I trust depth over speed, and it became the design brief for Edu Pointer.</p>
+        </aside>
+      </div>
+
+      <ol class="tl" id="timeline" aria-label="Timeline">
+        <li><span class="y">2020 &middot; 14</span><span class="what">Robot arm for COVID testing<span>pneumatic arm, competition finalist</span></span><a href="#arm">try it</a></li>
+        <li><span class="y">2021 &middot; 15</span><span class="what">Noise etiquette lamp<span>Arduino, invention contest</span></span><a href="#lab-lamp">try it</a></li>
+        <li class="big"><span class="y">2022 &middot; 16</span><span class="what">Star system simulation<span>101-star survey, VPython</span></span><a href="#stars">try it</a></li>
+        <li><span class="y">2022 &middot; 16</span><span class="what">Fair seat shuffler<span>Python</span></span><a href="#lab-seats">try it</a></li>
+        <li><span class="y">High school</span><span class="what">Roller coaster physics<span>VR survey, energy equations</span></span><a href="#lab-coaster">try it</a></li>
+        <li><span class="y">2023 &middot; 17</span><span class="what">Molecules club<span>ORCA, Avogadro</span></span><a href="#lab-molecule">try it</a></li>
+        <li class="big"><span class="y">2023 &middot; 17</span><span class="what">WATSON wearable<span>co-president, 1st place</span></span><a href="#wearable">try it</a></li>
+        <li class="big"><span class="y">2023 &middot; 17</span><span class="what">Shark evolution GA<span>~80-page report, outstanding work</span></span><a href="#shark">try it</a></li>
+        <li><span class="y">2024 &middot; 18</span><span class="what">Senior year<span>all in on the CSAT, by choice</span></span></li>
+        <li><span class="y">2025 &middot; 19</span><span class="what">Gap year, Edu Pointer<span>phone-free study, then product work</span></span><a href="#product">see</a></li>
+        <li><span class="y">2026 &middot; 20</span><span class="what">Daechi Wasong Academy site<span>web design</span></span><a href="#product">see</a></li>
+        <li><span class="y">Fall 2026</span><span class="what">Michigan State University<span>Computer Engineering, Edward E. Leird Scholarship</span></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="sec contact" id="contact" style="border-bottom:0">
+    <div class="wrap">
+      <p class="label" style="color:var(--chrome)">Contact</p>
+      <h2>Let's build<br><span>something.</span></h2>
+      <p style="color:var(--paper-2);margin-top:1.2rem;max-width:48ch">Open to internships, research, and conversations about robotics and embedded systems.</p>
+      <div class="reach">
+        <span class="email" id="email">ahnolivi@msu.edu</span>
+        <button class="btn solid" type="button" id="copy-email"><span>Copy email</span></button>
+        <a class="btn" href="https://github.com/olivia-jh-ahn" target="_blank" rel="noopener">GitHub &#8599;</a>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap"><span>Olivia (Joohee) Ahn &middot; Computer Engineering, Michigan State University</span><span>Demos are simplified browser re-creations of the original projects.</span></div>
+</footer>
 <script>
-(()=>{
-  'use strict';
-  document.documentElement.classList.add('js');
-  const $ = id => document.getElementById(id);
-  const menu = document.querySelector('.menu-toggle');
-  const navigation = $('navigation');
-  function closeMenu(){navigation.classList.remove('is-open');menu.setAttribute('aria-expanded','false');menu.textContent='Menu +';}
-  menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'Close −':'Menu +';navigation.classList.toggle('is-open',open);});
-  navigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape' && menu.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});
-  const signalText={heart:'A pulse becomes a signal. The first step is making it readable.',muscle:'Muscle activity becomes an electrical trace. A second view of the same body.',temperature:'Temperature changes more gradually. Different signals ask to be read differently.'};
-  let activeSignal='heart';
-  function waveY(x,channel){
-    if(channel==='temperature') return 64-x*.055+2*Math.sin(x*.023);
-    if(channel==='muscle'){const envelope=.12+.88*Math.pow(Math.sin(x*.013),4);return 49+envelope*(20*Math.sin(x*1.25)+9*Math.sin(x*2.23)+5*Math.cos(x*.73));}
-    const t=(x%140)/140;const peak=(center,width,height)=>height*Math.exp(-Math.pow((t-center)/width,2));
-    return 50-peak(.21,.036,7)+peak(.36,.016,8)-peak(.40,.015,37)+peak(.435,.019,26)-peak(.67,.065,11);
+(function () {
+  "use strict";
+
+  /* ================= shared helpers ================= */
+  var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rootStyle = getComputedStyle(document.documentElement);
+  function tok(n) { return rootStyle.getPropertyValue(n).trim(); }
+  var C = {
+    chrome: tok("--chrome"), ochre: tok("--ochre"), cobalt: tok("--cobalt"), cerulean: tok("--cerulean"),
+    paper: tok("--paper"), paper2: tok("--paper-2"), paper3: tok("--paper-3"), rule: tok("--rule"),
+    ink0: tok("--ink-0"), ink1: tok("--ink-1"), ink2: tok("--ink-2"), ink3: tok("--ink-3"), ok: tok("--ok"), alarm: tok("--alarm")
+  };
+  var MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+
+  function $(id) { return document.getElementById(id); }
+  function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function hexRgb(h) {
+    h = h.replace("#", "");
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
-  function updateCursor(){const x=Number($('sample').value)*4.2;$('wave-cursor').setAttribute('x1',x);$('wave-cursor').setAttribute('x2',x);$('wave-dot').setAttribute('cx',x);$('wave-dot').setAttribute('cy',waveY(x,activeSignal));$('sample-value').value=$('sample').value+'%';}
-  function renderWave(){let d='';for(let x=0;x<=420;x++)d+=(x?'L':'M')+x+' '+waveY(x,activeSignal).toFixed(2);$('wave-path').setAttribute('d',d);$('hero-wave').setAttribute('aria-label','Illustrative '+(activeSignal==='heart'?'heart-rate':activeSignal)+' waveform');updateCursor();}
-  document.querySelectorAll('[data-signal]').forEach(button=>button.addEventListener('click',()=>{activeSignal=button.dataset.signal;document.querySelectorAll('[data-signal]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));$('signal-caption').textContent=signalText[activeSignal];renderWave();}));
-  $('sample').addEventListener('input',updateCursor);renderWave();
-  // Deterministic silhouettes illustrate the site's reported outcomes; this is not the original simulator.
-  const svgNS='http://www.w3.org/2000/svg';
-  function population(mode){const group=$('shark-population');group.replaceChildren();const scarce=mode==='scarce';const count=scarce?8:18;for(let i=0;i<count;i++){const use=document.createElementNS(svgNS,'use');use.setAttribute('href','#shark-shape');const columns=scarce?4:6;const row=Math.floor(i/columns),col=i%columns;const x=scarce?82+col*160:50+col*109;const y=scarce?76+row*111:48+row*78;const variation=(i*17%9)*.018;use.setAttribute('transform',`translate(${x} ${y+(i%3-1)*6}) rotate(${(i%3-1)*(scarce?12:5)}) scale(${scarce?1.20+variation:.66+variation} ${scarce?.83+variation:.65+variation})`);use.setAttribute('opacity',String(.55+(i%4)*.14));group.append(use);}const result=$('evolution-result');result.textContent=scarce?'Longer bodies. Circling to feed. A form optimized for scarce food.':'Smaller. Slower. A body plan for avoiding predators.';}
-  document.querySelectorAll('[data-prey]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-prey]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));population(button.dataset.prey);}));population('abundant');
-  const sensorNotes={heart:'AD8232 · The heart-rate channel feeds into Arduino, alongside muscle and temperature inputs. An LCD and green/red LEDs make the readings visible.',muscle:'EMG · The muscle-signal channel joins heart rate and temperature in Arduino. The shared readout brings the three inputs into one wearable.',temperature:'TMP36 · The temperature channel feeds into Arduino. Green/red LEDs flag readings as normal or abnormal, alongside the LCD readout.'};
-  const sensorPaths={heart:'M153 61H204V130H240',muscle:'M153 130H240',temperature:'M153 199H204V130H240'};
-  function selectSensor(name){$('circuit-path').setAttribute('d',sensorPaths[name]+' M348 130H386V82H426 M386 130V195H426');Object.keys(sensorPaths).forEach(key=>{$('sensor-'+key).setAttribute('stroke',key===name?'#aa4b28':'#9da994');$('sensor-'+key).setAttribute('stroke-width',key===name?'2':'1');});$('sensor-note').textContent=sensorNotes[name];}
-  document.querySelectorAll('[data-sensor]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-sensor]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));selectSensor(button.dataset.sensor);}));selectSensor('heart');
-  function renderOrbit(){const degrees=Number($('orbit-phase').value),angle=degrees*Math.PI/180;const x=158*Math.cos(angle),y=94*Math.sin(angle);$('star-a').setAttribute('transform',`translate(${245+x} ${146+y})`);$('star-b').setAttribute('transform',`translate(${245-x} ${146-y})`);for(const [attribute,value] of Object.entries({x1:245+x,y1:146+y,x2:245-x,y2:146-y}))$('star-link').setAttribute(attribute,value);$('orbit-value').value=degrees+'°';}
-  $('orbit-phase').addEventListener('input',renderOrbit);renderOrbit();
-  const logEntries=[...document.querySelectorAll('.log-entry')];const expand=$('expand-log');
-  function syncLog(){const allOpen=logEntries.every(entry=>entry.open);expand.textContent=allOpen?'Collapse all −':'Expand all +';expand.setAttribute('aria-expanded',String(allOpen));}
-  expand.addEventListener('click',()=>{const open=!logEntries.every(entry=>entry.open);logEntries.forEach(entry=>entry.open=open);syncLog();});logEntries.forEach(entry=>entry.addEventListener('toggle',syncLog));
+  function rgba(h, a) { var c = hexRgb(h); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+  function mix(a, b, t) {
+    var A = hexRgb(a), B = hexRgb(b);
+    return "rgb(" + Math.round(lerp(A[0], B[0], t)) + "," + Math.round(lerp(A[1], B[1], t)) + "," + Math.round(lerp(A[2], B[2], t)) + ")";
+  }
+  function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function angDiff(a, b) { return Math.atan2(Math.sin(a - b), Math.cos(a - b)); }
+  function press(group, btn) { group.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); }); }
+
+  // A canvas sized to its CSS box at device pixel ratio.
+  function Stage(canvas, onResize) {
+    var st = { c: canvas, ctx: canvas.getContext("2d"), w: 0, h: 0, dpr: 1 }, ready = false;
+    st.fit = function () {
+      var r = canvas.getBoundingClientRect();
+      var w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+      var d = Math.min(window.devicePixelRatio || 1, 2);
+      if (w === st.w && h === st.h && d === st.dpr) return;
+      st.w = w; st.h = h; st.dpr = d;
+      canvas.width = Math.round(w * d); canvas.height = Math.round(h * d);
+      st.ctx.setTransform(d, 0, 0, d, 0, 0);
+      if (!onResize) return;
+      if (ready) onResize(st);
+      else Promise.resolve().then(function () { onResize(st); });
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(function () { st.fit(); }).observe(canvas);
+    else window.addEventListener("resize", st.fit);
+    st.fit();
+    ready = true;
+    return st;
+  }
+
+  // requestAnimationFrame loop that only runs while its element is on screen.
+  function Loop(el, frame) {
+    var api = { on: false, visible: false, paused: false };
+    var raf = 0, last = 0;
+    function tick(t) {
+      if (!api.on) return;
+      var dt = last ? Math.min(48, t - last) : 16;
+      last = t;
+      frame(dt, t);
+      raf = requestAnimationFrame(tick);
+    }
+    api.start = function () {
+      if (api.on || !api.visible || api.paused || document.hidden) return;
+      api.on = true; last = 0; raf = requestAnimationFrame(tick);
+    };
+    api.stop = function () { api.on = false; cancelAnimationFrame(raf); };
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        api.visible = es[es.length - 1].isIntersecting;
+        if (api.visible) api.start(); else api.stop();
+      }, { rootMargin: "120px 0px" }).observe(el);
+    } else { api.visible = true; api.start(); }
+    document.addEventListener("visibilitychange", function () { if (document.hidden) api.stop(); else api.start(); });
+    return api;
+  }
+
+  function drawShark(c, x, y, a, L, fill, alpha) {
+    var H = L * 0.17;
+    c.save(); c.translate(x, y); c.rotate(a); c.globalAlpha = alpha; c.fillStyle = fill;
+    c.beginPath();
+    c.moveTo(L * 0.5, 0);
+    c.quadraticCurveTo(L * 0.3, -H, -L * 0.2, -H * 0.55);
+    c.lineTo(-L * 0.38, -H * 0.2);
+    c.lineTo(-L * 0.56, -H * 1.15);
+    c.lineTo(-L * 0.47, 0);
+    c.lineTo(-L * 0.56, H * 1.15);
+    c.lineTo(-L * 0.38, H * 0.2);
+    c.lineTo(-L * 0.2, H * 0.55);
+    c.quadraticCurveTo(L * 0.3, H, L * 0.5, 0);
+    c.fill();
+    c.beginPath(); c.moveTo(L * 0.14, -H * 0.8); c.lineTo(-L * 0.07, -H * 2.1); c.lineTo(-L * 0.02, -H * 0.7); c.closePath(); c.fill();
+    c.beginPath(); c.moveTo(L * 0.14, H * 0.8); c.lineTo(-L * 0.07, H * 2.1); c.lineTo(-L * 0.02, H * 0.7); c.closePath(); c.fill();
+    c.restore();
+  }
+
+  function gridBg(c, w, h, step, color) {
+    c.strokeStyle = color; c.lineWidth = 1;
+    c.beginPath();
+    for (var x = step; x < w; x += step) { c.moveTo(Math.round(x) + 0.5, 0); c.lineTo(Math.round(x) + 0.5, h); }
+    for (var y = step; y < h; y += step) { c.moveTo(0, Math.round(y) + 0.5); c.lineTo(w, Math.round(y) + 0.5); }
+    c.stroke();
+  }
+
+  /* ================= nav + copy ================= */
+  (function nav() {
+    var links = document.querySelectorAll(".links a");
+    if (!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    ["arm", "work", "lab", "product", "about", "contact"].forEach(function (id) { var el = $(id); if (el) io.observe(el); });
+  })();
+
+  (function copy() {
+    var btn = $("copy-email"), em = $("email");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var label = btn.querySelector("span");
+      function done(m) { label.textContent = m; setTimeout(function () { label.textContent = "Copy email"; }, 2000); }
+      function sel() { try { var r = document.createRange(); r.selectNodeContents(em); var s = getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {} }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(em.textContent.trim()).then(function () { done("Copied"); }, function () { sel(); done("Selected"); });
+      } else { sel(); done("Selected"); }
+    });
+  })();
+
+  /* ================= hero ================= */
+  (function hero() {
+    var hero = document.querySelector(".hero"), slot = $("slot");
+    if (!hero || !slot) return;
+    var words = [["robot arms", "#arm"], ["evolving sharks", "#shark"], ["biosensors", "#wearable"], ["star systems", "#stars"], ["noise lamps", "#lab-lamp"], ["study tools", "#product"]];
+    var i = 0, hovering = false, onScreen = true;
+    function build(word) {
+      var w = document.createElement("span");
+      w.className = "w" + (RM ? " still" : "");
+      for (var k = 0; k < word.length; k++) {
+        var ch = document.createElement("span");
+        ch.className = "ch";
+        ch.textContent = word[k] === " " ? " " : word[k];
+        ch.style.animationDelay = (k * 26) + "ms";
+        w.appendChild(ch);
+      }
+      return w;
+    }
+    var first = slot.querySelector(".w");
+    if (first) { var fw = build(words[0][0]); fw.classList.add("still"); slot.replaceChild(fw, first); }
+    function next() {
+      if (hovering || !onScreen || document.hidden) return;
+      i = (i + 1) % words.length;
+      var old = slot.querySelector(".w:not(.out)");
+      slot.style.width = slot.getBoundingClientRect().width + "px";
+      var nw = build(words[i][0]);
+      slot.appendChild(nw);
+      if (old) {
+        if (RM) old.parentNode.removeChild(old);
+        else { old.classList.remove("still"); old.classList.add("out"); setTimeout(function () { if (old.parentNode) old.parentNode.removeChild(old); }, 420); }
+      }
+      var w1 = nw.getBoundingClientRect().width;
+      requestAnimationFrame(function () { slot.style.width = w1 + "px"; });
+      slot.setAttribute("href", words[i][1]);
+    }
+    setInterval(next, RM ? 4200 : 2600);
+    slot.addEventListener("pointerenter", function () { hovering = true; });
+    slot.addEventListener("pointerleave", function () { hovering = false; });
+    window.addEventListener("resize", function () { slot.style.width = ""; });
+
+    var mx = 0.72, my = 0.32, tx = mx, ty = my, lastMove = -1e9;
+    function apply() { hero.style.setProperty("--mx", (mx * 100).toFixed(2) + "%"); hero.style.setProperty("--my", (my * 100).toFixed(2) + "%"); }
+    hero.addEventListener("pointermove", function (e) {
+      var r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width; ty = (e.clientY - r.top) / r.height; lastMove = performance.now();
+      if (RM) { mx = tx; my = ty; apply(); }
+    });
+    var lp = Loop(hero, function (dt, t) {
+      if (t - lastMove > 2500) { tx = 0.66 + 0.22 * Math.sin(t * 0.00021); ty = 0.38 + 0.2 * Math.sin(t * 0.00029 + 1.3); }
+      var k = 1 - Math.pow(0.9, dt / 16);
+      mx += (tx - mx) * k; my += (ty - my) * k; apply();
+    });
+    if (RM) lp.stop();
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; }).observe(hero);
+    }
+    if (RM) { lp.paused = true; }
+    apply();
+  })();
+
+  /* ================= robot arm ================= */
+  (function arm() {
+    var cv = $("arm-bench");
+    if (!cv) return;
+    var PAY = 200, VH = 46, cap = 21;
+    var base = { x: 0, y: 0 }, tableY = 0, L1 = 100, L2 = 100;
+    var th1 = null, th2 = null, tgt = null, grip = 0, gripping = false, lastMove = -1e9;
+    var vial = null, slipT = -1, flash = 0, flashText = "";
+    var capFill = $("cap-fill"), capMark = $("cap-mark"), capTxt = $("cap-txt"), hint = $("arm-hint");
+    cv.tabIndex = 0;
+
+    function ik(x, y) {
+      var dx = x - base.x, dy = y - base.y;
+      var d = clamp(Math.hypot(dx, dy), Math.abs(L1 - L2) + 6, L1 + L2 - 2);
+      var c2 = clamp((d * d - L1 * L1 - L2 * L2) / (2 * L1 * L2), -1, 1);
+      var a2 = Math.acos(c2);
+      var a1 = Math.atan2(dy, dx) - Math.atan2(L2 * Math.sin(a2), L1 + L2 * Math.cos(a2));
+      return [a1, a2];
+    }
+    function layout(s) {
+      var w = s.w, h = s.h;
+      tableY = h - 38;
+      var reach = Math.min(w * 0.66, (tableY - 24) * 1.15, 470);
+      base = { x: Math.max(56, Math.min(w * 0.22, w - reach - 30)), y: tableY - 34 };
+      L1 = reach * 0.53; L2 = reach * 0.47;
+      var vx = Math.min(w - 44, base.x + reach * 0.8);
+      if (!vial) vial = { x: vx, y: tableY, vy: 0, held: false, falling: false };
+      else { vial.x = clamp(vial.x, 30, w - 30); if (!vial.held) vial.y = tableY; }
+      if (!tgt) tgt = { x: base.x + reach * 0.5, y: base.y - reach * 0.55 };
+      if (th1 === null) { var a = ik(tgt.x, tgt.y); th1 = a[0]; th2 = a[1]; }
+    }
+    var st = Stage(cv, function (s) { layout(s); if (RM) draw(); });
+
+    function endEff() {
+      var ex = base.x + L1 * Math.cos(th1), ey = base.y + L1 * Math.sin(th1);
+      return { ex: ex, ey: ey, x: ex + L2 * Math.cos(th1 + th2), y: ey + L2 * Math.sin(th1 + th2) };
+    }
+
+    function setCap(v) {
+      cap = v;
+      capFill.style.width = Math.min(100, v / 250 * 100) + "%";
+      capFill.classList.toggle("ok", v >= PAY);
+      capMark.style.left = (PAY / 250 * 100) + "%";
+      capTxt.innerHTML = v >= PAY
+        ? "<b>" + v + " g</b> grip. Enough for the 200 g vial, so pick it up."
+        : "<b>" + v + " g</b> grip. The 200 g vial will slip. Try it, then upgrade.";
+    }
+    var cfg = $("arm-config");
+    cfg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      press(cfg, b); setCap(parseFloat(b.dataset.cap));
+    });
+    setCap(21);
+
+    function local(e) { var r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+    cv.addEventListener("pointermove", function (e) { var p = local(e); tgt.x = p.x; tgt.y = p.y; lastMove = performance.now(); });
+    cv.addEventListener("pointerdown", function (e) {
+      var p = local(e); tgt.x = p.x; tgt.y = p.y; lastMove = performance.now(); gripping = true;
+      try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+      if (hint) hint.hidden = true;
+      if (RM) step(400);
+    });
+    function release() { gripping = false; }
+    cv.addEventListener("pointerup", release);
+    cv.addEventListener("pointercancel", release);
+    cv.addEventListener("keydown", function (e) {
+      var d = 14, used = true;
+      if (e.key === "ArrowLeft") tgt.x -= d; else if (e.key === "ArrowRight") tgt.x += d;
+      else if (e.key === "ArrowUp") tgt.y -= d; else if (e.key === "ArrowDown") tgt.y += d;
+      else if (e.key === " " || e.key === "Enter") gripping = !gripping;
+      else used = false;
+      if (used) { e.preventDefault(); lastMove = performance.now(); if (hint) hint.hidden = true; if (RM) step(400); }
+    });
+
+    function maxEY(x) {
+      if (vial.held) return tableY - 20 - VH;
+      if (Math.abs(x - vial.x) < 20 && !vial.falling) return vial.y - VH - 14;
+      return tableY - 38;
+    }
+
+    function step(dt) {
+      var t = performance.now();
+      if (t - lastMove > 3500 && !gripping && !RM) {
+        var R = L1 + L2;
+        tgt.x = base.x + R * (0.52 + 0.16 * Math.sin(t * 0.0006));
+        tgt.y = base.y - R * (0.5 + 0.14 * Math.sin(t * 0.0009));
+      }
+      var ty = Math.min(tgt.y, maxEY(tgt.x));
+      var a = ik(clamp(tgt.x, 10, st.w - 10), ty);
+      var k = RM ? 1 : 1 - Math.pow(0.8, dt / 16);
+      th1 += angDiff(a[0], th1) * k; th2 += angDiff(a[1], th2) * k;
+      var E = endEff();
+      grip += ((gripping ? 1 : 0) - grip) * (RM ? 1 : 1 - Math.pow(0.72, dt / 16));
+
+      if (gripping && grip > 0.8 && !vial.held && !vial.falling && Math.abs(E.x - vial.x) < 16 && E.y > vial.y - VH - 34) {
+        vial.held = true;
+        slipT = cap >= PAY ? -1 : 520;
+      }
+      if (vial.held) {
+        vial.x = E.x;
+        vial.y = E.y + 20 + VH;
+        if (slipT > 0) {
+          slipT -= dt;
+          vial.y += (1 - Math.max(0, slipT) / 520) * 10;
+          if (slipT <= 0) { vial.held = false; vial.falling = true; vial.vy = 0; flash = 1100; flashText = "slipped: " + cap + " g < 200 g"; }
+        }
+        if (!gripping && vial.held) { vial.held = false; vial.falling = vial.y < tableY - 0.5; vial.vy = 0; }
+      }
+      if (vial.falling) {
+        vial.vy += 0.0022 * dt;
+        vial.y += vial.vy * dt;
+        if (vial.y >= tableY) { vial.y = tableY; vial.falling = false; vial.vy = 0; }
+      }
+      vial.x = clamp(vial.x, 26, st.w - 26);
+      if (flash > 0) flash -= dt;
+      draw();
+    }
+
+    function bar(c, x1, y1, x2, y2, w, fill, edge) {
+      c.lineCap = "round";
+      c.strokeStyle = edge; c.lineWidth = w + 3; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+      c.strokeStyle = fill; c.lineWidth = w; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+    }
+    function joint(c, x, y, r) {
+      c.fillStyle = C.chrome; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+      c.fillStyle = C.ink2; c.beginPath(); c.arc(x, y, r * 0.4, 0, Math.PI * 2); c.fill();
+    }
+
+    function draw() {
+      var c = st.ctx, w = st.w, h = st.h;
+      c.fillStyle = C.ink2; c.fillRect(0, 0, w, h);
+      gridBg(c, w, h, 24, rgba(C.rule, 0.45));
+      // table
+      c.fillStyle = C.ink3; c.fillRect(0, tableY, w, h - tableY);
+      c.strokeStyle = C.paper3; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, tableY + 0.5); c.lineTo(w, tableY + 0.5); c.stroke();
+      // pedestal
+      c.fillStyle = C.ink3; c.strokeStyle = C.paper3; c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(base.x - 34, tableY); c.lineTo(base.x - 20, base.y); c.lineTo(base.x + 20, base.y); c.lineTo(base.x + 34, tableY); c.closePath(); c.fill(); c.stroke();
+
+      var E = endEff();
+      // pneumatic piston from pedestal to link 1
+      var p0x = base.x - 30, p0y = tableY - 4;
+      var p1x = base.x + L1 * 0.5 * Math.cos(th1), p1y = base.y + L1 * 0.5 * Math.sin(th1);
+      var mx = lerp(p0x, p1x, 0.55), my = lerp(p0y, p1y, 0.55);
+      c.lineCap = "round";
+      c.strokeStyle = C.paper3; c.lineWidth = 3; c.beginPath(); c.moveTo(mx, my); c.lineTo(p1x, p1y); c.stroke();
+      c.strokeStyle = C.cobalt; c.lineWidth = 10; c.beginPath(); c.moveTo(p0x, p0y); c.lineTo(mx, my); c.stroke();
+
+      bar(c, base.x, base.y, E.ex, E.ey, 13, C.ink3, C.paper2);
+      bar(c, E.ex, E.ey, E.x, E.y, 10, C.ink3, C.paper2);
+      joint(c, base.x, base.y, 8);
+      joint(c, E.ex, E.ey, 7);
+
+      // wrist + fingers (always hang straight down)
+      var gap = lerp(32, vial.held ? 17 : 12, grip);
+      c.strokeStyle = C.paper2; c.lineWidth = 4; c.lineCap = "round";
+      c.beginPath(); c.moveTo(E.x, E.y); c.lineTo(E.x, E.y + 14); c.stroke();
+      c.beginPath(); c.moveTo(E.x - gap * 0.45, E.y + 14); c.lineTo(E.x + gap * 0.45, E.y + 14); c.stroke();
+      c.strokeStyle = C.paper; c.lineWidth = 3.5;
+      c.beginPath(); c.moveTo(E.x - gap * 0.45, E.y + 14); c.lineTo(E.x - gap / 2, E.y + 38); c.stroke();
+      c.beginPath(); c.moveTo(E.x + gap * 0.45, E.y + 14); c.lineTo(E.x + gap / 2, E.y + 38); c.stroke();
+      joint(c, E.x, E.y, 5);
+
+      // vial
+      var vx = vial.x, vb = vial.y, vt = vb - VH;
+      c.fillStyle = rgba(C.ochre, 0.75);
+      c.beginPath(); c.moveTo(vx - 6, vt + VH * 0.42); c.lineTo(vx + 6, vt + VH * 0.42); c.lineTo(vx + 6, vb - 6); c.arc(vx, vb - 6, 6, 0, Math.PI); c.closePath(); c.fill();
+      c.strokeStyle = C.cerulean; c.lineWidth = 1.6;
+      c.beginPath(); c.moveTo(vx - 7, vt + 4); c.lineTo(vx - 7, vb - 7); c.arc(vx, vb - 7, 7, Math.PI, 0, true); c.lineTo(vx + 7, vt + 4); c.stroke();
+      c.fillStyle = C.chrome; c.fillRect(vx - 8, vt - 2, 16, 7);
+      if (!vial.held) {
+        c.fillStyle = C.paper2; c.font = "500 11px " + MONO; c.textAlign = "center";
+        c.fillText("200 g", vx, tableY + 20);
+      }
+      if (flash > 0) {
+        c.globalAlpha = Math.min(1, flash / 300);
+        c.fillStyle = C.alarm; c.font = "600 12px " + MONO; c.textAlign = "center";
+        c.fillText(flashText, clamp(vx, 90, w - 90), vt - 16);
+        c.globalAlpha = 1;
+      }
+    }
+
+    var loop = Loop(cv, function (dt) { step(dt); });
+    if (RM) { loop.paused = true; loop.stop(); draw(); }
+  })();
+
+  /* ================= shark genetic algorithm ================= */
+  // Real selection, crossover and mutation. Each shark's lifespan is sampled from an encounter-rate model:
+  // bigger mouths find more food, but bigger and faster sharks are noticed by predators sooner.
+  function SharkGA() {
+    var T = 600, N = 48, AREA = 600 * 340;
+    var S_MIN = 0.3, S_MAX = 2.8, V_MIN = 0.1, V_MAX = 1.8;
+    var self = { T: T, N: N, env: { prey: 260, preySpeed: 1.8 }, gen: 0, history: [] };
+    self.mouth = function (s) { return 3 + 5 * Math.pow(s, 1.7); };
+    self.foodRate = function (s, v, env) { return (env.prey / AREA) * 2 * self.mouth(s) * (v + env.preySpeed + 0.3); };
+    self.cost = function (s, v) { return 0.1 + 0.02 * s + 0.11 * v * v; };
+    self.hazard = function (s, v) { var R = 6 + 20 * v + 12 * s; return (4 / AREA) * 2 * R * Math.sqrt(4 + v * v) * 0.3; };
+    self.live = function (g, env) {
+      var net = self.foodRate(g.s, g.v, env) * 60 - self.cost(g.s, g.v);
+      var tStarve = net >= 0 ? Infinity : (25 / -net) * (1 + 0.15 * gauss());
+      var tPred = -Math.log(1 - Math.random()) / self.hazard(g.s, g.v);
+      if (tPred < tStarve && tPred < T) return { age: tPred, cause: "predator" };
+      if (tStarve < T) return { age: Math.max(1, tStarve), cause: "starved" };
+      return { age: T, cause: null };
+    };
+    function stats(key) {
+      var m = 0, i, g = self.genes;
+      for (i = 0; i < N; i++) m += g[i][key];
+      m /= N;
+      var q = 0;
+      for (i = 0; i < N; i++) q += (g[i][key] - m) * (g[i][key] - m);
+      return { mean: m, sd: Math.sqrt(q / N) };
+    }
+    self.reset = function () {
+      self.genes = [];
+      for (var i = 0; i < N; i++) self.genes.push({ s: 1.2 + Math.random() * 0.7, v: 0.8 + Math.random() * 0.6 });
+      self.gen = 0; self.history = []; self.lives = null;
+    };
+    self.evaluate = function () {
+      var env = self.env;
+      self.lives = self.genes.map(function (g) { return self.live(g, env); });
+      return self.lives;
+    };
+    self.breed = function () {
+      if (!self.lives) self.evaluate();
+      var L = self.lives, G = self.genes, ss = stats("s"), vs = stats("v"), starved = 0, eaten = 0;
+      L.forEach(function (l) { if (l.cause === "starved") starved++; else if (l.cause === "predator") eaten++; });
+      self.history.push({ gen: self.gen, s: ss.mean, v: vs.mean, sdS: ss.sd, sdV: vs.sd, starved: starved, eaten: eaten });
+      var fit = L.map(function (l) { return l.age + Math.random(); });
+      function pick() {
+        var b = -1;
+        for (var t = 0; t < 3; t++) { var c = Math.floor(Math.random() * N); if (b < 0 || fit[c] > fit[b]) b = c; }
+        return G[b];
+      }
+      var next = [];
+      for (var i = 0; i < N; i++) {
+        var a = pick(), b = pick();
+        var s = Math.random() < 0.5 ? a.s : b.s, v = Math.random() < 0.5 ? a.v : b.v;
+        if (Math.random() < 0.7) s += gauss() * 0.08;
+        if (Math.random() < 0.7) v += gauss() * 0.06;
+        next.push({ s: clamp(s, S_MIN, S_MAX), v: clamp(v, V_MIN, V_MAX) });
+      }
+      self.genes = next; self.gen++; self.lives = null;
+    };
+    self.summary = function () { return { s: stats("s"), v: stats("v") }; };
+    self.reset();
+    return self;
+  }
+
+  (function shark() {
+    var oc = $("shark-ocean"), chc = $("shark-chart");
+    if (!oc) return;
+    var ga = SharkGA(), WW = 600, WH = 340, GEN_MS = 2400;
+    var foodIn = $("shark-food"), spIn = $("shark-pspeed"), runBtn = $("shark-run"), presetG = $("shark-preset");
+    var running = !RM, clock = 0, marks = [], vis = [], prey = [], preds = [], ref = null;
+
+    function spawnVis() {
+      ga.evaluate();
+      vis = ga.genes.map(function (g, i) {
+        return { s: g.s, v: g.v, x: Math.random() * WW, y: Math.random() * WH, a: Math.random() * 6.283, life: ga.lives[i], dead: false, deadAt: 0 };
+      });
+    }
+    function syncPrey() {
+      var n = Math.min(ga.env.prey, 300);
+      while (prey.length < n) prey.push({ x: Math.random() * WW, y: Math.random() * WH, a: Math.random() * 6.283 });
+      prey.length = n;
+    }
+    for (var k = 0; k < 4; k++) preds.push({ x: Math.random() * WW, y: Math.random() * WH, a: Math.random() * 6.283 });
+    function setRef() { var s = ga.summary(); ref = { s: s.s.mean, v: s.v.mean, gen: ga.gen }; }
+
+    spawnVis(); syncPrey(); setRef();
+    var stO = Stage(oc, function () { if (RM) drawOcean(); });
+    var stC = Stage(chc, function () { drawChart(); });
+
+    function pct(now, was) { var p = (now - was) / was * 100; return (p >= 0 ? "+" : "−") + Math.abs(p).toFixed(0) + "%"; }
+    function verdict() {
+      var s = ga.summary(), n = ga.gen - ref.gen;
+      if (n < 6) return "Watch the averages move.";
+      var ds = (s.s.mean - ref.s) / ref.s, dv = (s.v.mean - ref.v) / ref.v;
+      if (ds < -0.15 && dv < -0.15) return "Smaller and slower. A body plan for avoiding predators.";
+      if (ds > 0.15 && dv < -0.15) return "Longer and slower. Big mouths and little swimming, like a whale shark.";
+      if (ds > 0.15) return "Bigger. Food is the limiting factor here.";
+      if (ds < -0.15) return "Smaller. Predators are the main pressure.";
+      if (dv < -0.15) return "Slower. Fast swimming burns energy and draws predators.";
+      return "No strong pressure yet. Give it more generations.";
+    }
+    function readout() {
+      var s = ga.summary();
+      $("shark-s").innerHTML = s.s.mean.toFixed(2) + "<small>" + pct(s.s.mean, ref.s) + "</small>";
+      $("shark-v").innerHTML = s.v.mean.toFixed(2) + "<small>" + pct(s.v.mean, ref.v) + "</small>";
+      $("shark-gen").textContent = "Generation " + ga.gen;
+      $("shark-verdict").textContent = verdict();
+    }
+    function nextGen() { ga.breed(); clock = 0; spawnVis(); readout(); drawChart(); }
+
+    function envChanged() {
+      ga.env.prey = +foodIn.value; ga.env.preySpeed = +spIn.value;
+      $("shark-food-out").textContent = ga.env.prey + " prey";
+      $("shark-pspeed-out").textContent = (+spIn.value).toFixed(1);
+      syncPrey();
+      if (!marks.length || marks[marks.length - 1] !== ga.gen) marks.push(ga.gen);
+      setRef(); readout(); drawChart();
+      // keep this generation's survival consistent with the new ocean
+      var alive = vis.filter(function (v) { return !v.dead; });
+      alive.forEach(function (v) { v.life = ga.live(v, ga.env); });
+      ga.lives = vis.map(function (v) { return v.life; });
+      if (RM) drawOcean();
+    }
+    presetG.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      press(presetG, b); foodIn.value = b.dataset.prey; spIn.value = b.dataset.speed; envChanged();
+    });
+    [foodIn, spIn].forEach(function (inp) {
+      inp.addEventListener("input", function () { presetG.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); envChanged(); });
+    });
+    runBtn.addEventListener("click", function () { running = !running; runBtn.textContent = running ? "Pause" : "Run"; });
+    $("shark-skip").addEventListener("click", function () {
+      for (var i = 0; i < 20; i++) { ga.evaluate(); ga.breed(); }
+      clock = 0; spawnVis(); readout(); drawChart(); if (RM) drawOcean();
+    });
+    $("shark-reset").addEventListener("click", function () {
+      ga.reset(); marks = []; clock = 0; spawnVis(); setRef(); readout(); drawChart(); if (RM) drawOcean();
+    });
+    runBtn.textContent = running ? "Pause" : "Run";
+
+    function frame(dt) {
+      var f = dt / 16;
+      var ps = ga.env.preySpeed * 0.5 * f;
+      prey.forEach(function (p) {
+        p.a += gauss() * 0.25; p.x += Math.cos(p.a) * ps; p.y += Math.sin(p.a) * ps;
+        p.x = (p.x + WW) % WW; p.y = (p.y + WH) % WH;
+      });
+      preds.forEach(function (p) {
+        p.a += gauss() * 0.06; p.x += Math.cos(p.a) * 1.1 * f; p.y += Math.sin(p.a) * 1.1 * f;
+        p.x = (p.x + WW) % WW; p.y = (p.y + WH) % WH;
+      });
+      if (running) clock += dt;
+      var frac = clock / GEN_MS;
+      vis.forEach(function (v) {
+        if (v.dead) return;
+        v.a += gauss() * 0.1;
+        var sp = (0.25 + v.v * 0.9) * f;
+        v.x = (v.x + Math.cos(v.a) * sp + WW) % WW; v.y = (v.y + Math.sin(v.a) * sp + WH) % WH;
+        if (running && v.life.cause && frac >= v.life.age / ga.T) { v.dead = true; v.deadAt = clock; }
+      });
+      if (running && clock >= GEN_MS) nextGen();
+      drawOcean();
+    }
+
+    function drawOcean() {
+      var c = stO.ctx, w = stO.w, h = stO.h, sx = w / WW, sy = h / WH, sc = clamp(w / 640, 0.62, 1.25);
+      var g = c.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, C.ink2); g.addColorStop(1, mix(C.ink2, C.ink0, 0.6));
+      c.fillStyle = g; c.fillRect(0, 0, w, h);
+      c.fillStyle = rgba(C.cerulean, 0.55);
+      prey.forEach(function (p) { c.fillRect(p.x * sx - 1, p.y * sy - 1, 2.4, 2.4); });
+      preds.forEach(function (p) { drawShark(c, p.x * sx, p.y * sy, p.a, 46 * sc, rgba(C.alarm, 0.75), 1); });
+      vis.forEach(function (v) {
+        var L = (10 + 9 * v.s) * sc * 1.15, col = mix(C.ochre, C.cerulean, clamp((v.v - 0.1) / 1.7, 0, 1)), alpha = 1;
+        if (v.dead) {
+          var t = (clock - v.deadAt) / 600;
+          if (t >= 1) return;
+          alpha = 1 - t;
+          if (v.life.cause === "predator") {
+            c.strokeStyle = rgba(C.alarm, 1 - t); c.lineWidth = 2;
+            c.beginPath(); c.arc(v.x * sx, v.y * sy, 6 + t * 18, 0, Math.PI * 2); c.stroke();
+          } else col = C.paper3;
+        }
+        drawShark(c, v.x * sx, v.y * sy, v.a, L, col, alpha);
+      });
+    }
+
+    function drawChart() {
+      var c = stC.ctx, w = stC.w, h = stC.h;
+      c.fillStyle = C.ink1; c.fillRect(0, 0, w, h);
+      var pL = 34, pR = 14, pT = 14, pB = 22;
+      var cur = ga.summary();
+      var pts = ga.history.map(function (e) { return e; }).concat([{ gen: ga.gen, s: cur.s.mean, v: cur.v.mean, sdS: cur.s.sd, sdV: cur.v.sd }]);
+      var maxG = Math.max(30, ga.gen);
+      function X(gn) { return pL + (w - pL - pR) * gn / maxG; }
+      function Y(val) { return pT + (h - pT - pB) * (1 - val / 3); }
+      c.font = "400 10px " + MONO; c.fillStyle = C.paper3; c.textAlign = "right"; c.textBaseline = "middle";
+      c.strokeStyle = rgba(C.rule, 0.8); c.lineWidth = 1;
+      for (var v = 0; v <= 3; v++) { c.beginPath(); c.moveTo(pL, Math.round(Y(v)) + 0.5); c.lineTo(w - pR, Math.round(Y(v)) + 0.5); c.stroke(); c.fillText(String(v), pL - 8, Y(v)); }
+      c.textAlign = "center"; c.textBaseline = "top";
+      var stepG = maxG > 120 ? 40 : maxG > 60 ? 20 : 10;
+      for (var gx = 0; gx < maxG - stepG * 0.4; gx += stepG) c.fillText(String(gx), X(gx), h - pB + 6);
+      c.textAlign = "right"; c.fillText("gen " + maxG, w - pR, h - pB + 6);
+      marks.forEach(function (m) {
+        if (m === 0) return;
+        c.strokeStyle = rgba(C.paper, 0.35); c.setLineDash([3, 4]);
+        c.beginPath(); c.moveTo(X(m) + 0.5, pT); c.lineTo(X(m) + 0.5, h - pB); c.stroke(); c.setLineDash([]);
+        c.fillStyle = C.paper3; c.textAlign = "center"; c.fillText("ocean changed", X(m), 2);
+      });
+      function series(key, sdKey, col) {
+        if (pts.length > 1) {
+          c.fillStyle = rgba(col, 0.13); c.beginPath();
+          pts.forEach(function (p, i) { var x = X(p.gen), y = Y(clamp(p[key] + p[sdKey], 0, 3)); if (i) c.lineTo(x, y); else c.moveTo(x, y); });
+          for (var i = pts.length - 1; i >= 0; i--) c.lineTo(X(pts[i].gen), Y(clamp(pts[i][key] - pts[i][sdKey], 0, 3)));
+          c.closePath(); c.fill();
+          c.strokeStyle = col; c.lineWidth = 2; c.lineJoin = "round"; c.beginPath();
+          pts.forEach(function (p, i) { var x = X(p.gen), y = Y(p[key]); if (i) c.lineTo(x, y); else c.moveTo(x, y); });
+          c.stroke();
+        }
+        var last = pts[pts.length - 1];
+        c.fillStyle = col; c.beginPath(); c.arc(X(last.gen), Y(last[key]), 3.5, 0, Math.PI * 2); c.fill();
+      }
+      series("s", "sdS", C.chrome);
+      series("v", "sdV", C.cobalt);
+    }
+
+    readout(); drawChart();
+    var loop = Loop(oc, frame);
+    if (RM) { loop.paused = true; loop.stop(); drawOcean(); }
+    if (RM) {
+      // Reduced motion: generations advance on demand only.
+      runBtn.addEventListener("click", function () {
+        if (!running) return;
+        running = false; runBtn.textContent = "Run";
+        for (var i = 0; i < 5; i++) { ga.evaluate(); ga.breed(); }
+        spawnVis(); readout(); drawChart(); drawOcean();
+      });
+    }
+  })();
+
+  /* ================= wearable ================= */
+  (function wearable() {
+    var cv = $("wear-traces");
+    if (!cv) return;
+    var act = $("w-act"), grip = $("w-grip"), temp = $("w-temp");
+    var lanes = [[], [], []], N = 0, phase = 0, emgEnv = 0.1, tShow = 36.6, sampAcc = 0, tt = 0;
+    var RATE = 0.11; // samples (px) per ms
+    function vals() { return { bpm: Math.round(62 + (+act.value) * 1.12), emg: 0.06 + (+grip.value) / 100 * 1.1, t: (+temp.value) / 10 }; }
+    function ecg(x) {
+      function g(c, w, a) { return a * Math.exp(-Math.pow((x - c) / w, 2)); }
+      return g(0.18, 0.035, 0.12) - g(0.355, 0.012, 0.12) + g(0.38, 0.011, 1) - g(0.405, 0.012, 0.28) + g(0.62, 0.05, 0.28);
+    }
+    function sample() {
+      var v = vals();
+      phase += (v.bpm / 60) / (RATE * 1000);
+      emgEnv += (v.emg - emgEnv) * 0.02;
+      tShow += (v.t - tShow) * 0.01;
+      tt++;
+      lanes[0].push(ecg(phase % 1) + 0.015 * gauss());
+      lanes[1].push(gauss() * emgEnv * 0.85 * (0.7 + 0.3 * Math.sin(tt * 0.013)));
+      lanes[2].push(tShow + 0.012 * gauss());
+      for (var i = 0; i < 3; i++) if (lanes[i].length > N) lanes[i].splice(0, lanes[i].length - N);
+    }
+    var st = Stage(cv, function (s) {
+      N = s.w + 2;
+      if (lanes[0].length < N) { var need = N - lanes[0].length; for (var i = 0; i < need; i++) sample(); }
+      draw();
+    });
+
+    function flags() {
+      var v = vals();
+      return { v: v, hr: v.bpm < 50 || v.bpm > 120, emg: v.emg > 0.8, t: v.t > 37.5 };
+    }
+    function pad(n, w) { n = String(n); while (n.length < w) n = "0" + n; return n; }
+    function ui() {
+      var f = flags(), v = f.v;
+      var a = +act.value;
+      $("w-act-out").textContent = (a < 20 ? "rest" : a < 45 ? "walking" : a < 75 ? "jogging" : "sprint") + " · " + v.bpm + " bpm";
+      var gr = +grip.value;
+      $("w-grip-out").textContent = (gr < 30 ? "relaxed" : gr < 65 ? "firm" : "clenched") + " · " + v.emg.toFixed(2) + " mV";
+      $("w-temp-out").textContent = v.t.toFixed(1) + " °C";
+      $("led-hr").classList.toggle("bad", f.hr);
+      $("led-emg").classList.toggle("bad", f.emg);
+      $("led-t").classList.toggle("bad", f.t);
+      var bad = [f.hr && "HR", f.emg && "EMG", f.t && "TEMP"].filter(Boolean);
+      var status = bad.length === 0 ? "OK" : bad.length === 1 ? "!" + bad[0] : "ALERT";
+      var l1 = "HR " + pad(v.bpm, 3) + "bpm T" + v.t.toFixed(1) + "C";
+      var l2 = "EMG " + v.emg.toFixed(2) + "mV ";
+      while ((l2 + status).length < 16) l2 += " ";
+      $("w-lcd").textContent = l1 + "\n" + l2 + status;
+      var lines = $("w-code").querySelectorAll("span");
+      lines[0].classList.toggle("hit", f.hr); lines[1].classList.toggle("hit", f.emg); lines[2].classList.toggle("hit", f.t);
+      if (RM) { for (var i = 0; i < 60; i++) sample(); draw(); }
+    }
+    [act, grip, temp].forEach(function (i) { i.addEventListener("input", ui); });
+
+    function draw() {
+      var c = st.ctx, w = st.w, h = st.h, lh = h / 3;
+      c.fillStyle = C.ink2; c.fillRect(0, 0, w, h);
+      gridBg(c, w, h, 20, rgba(C.rule, 0.35));
+      var f = flags();
+      var names = ["HEART · ECG", "MUSCLE · EMG", "SKIN · TMP36"];
+      var vtxt = [f.v.bpm + " bpm", f.v.emg.toFixed(2) + " mV", f.v.t.toFixed(1) + " °C"];
+      var bad = [f.hr, f.emg, f.t];
+      var cols = [C.cerulean, C.ochre, C.chrome];
+      for (var L = 0; L < 3; L++) {
+        var top = L * lh, mid = top + lh * 0.62;
+        if (L) { c.strokeStyle = C.rule; c.lineWidth = 1; c.beginPath(); c.moveTo(0, Math.round(top) + 0.5); c.lineTo(w, Math.round(top) + 0.5); c.stroke(); }
+        var Yf;
+        if (L === 0) Yf = function (v) { return mid - v * lh * 0.4; };
+        else if (L === 1) Yf = function (v) { return mid - v * lh * 0.22; };
+        else Yf = function (v) { return top + lh - 12 - (v - 35.2) / 5 * (lh - 34); };
+        // thresholds
+        c.setLineDash([4, 5]); c.strokeStyle = rgba(C.alarm, 0.55); c.lineWidth = 1;
+        if (L === 1) { [0.8, -0.8].forEach(function (th) { c.beginPath(); c.moveTo(0, Yf(th)); c.lineTo(w, Yf(th)); c.stroke(); }); }
+        if (L === 2) { c.beginPath(); c.moveTo(0, Yf(37.5)); c.lineTo(w, Yf(37.5)); c.stroke(); }
+        c.setLineDash([]);
+        var data = lanes[L];
+        c.save(); c.beginPath(); c.rect(0, top + 1, w, lh - 2); c.clip();
+        c.strokeStyle = cols[L]; c.lineWidth = L === 1 ? 1 : 1.6; c.lineJoin = "round"; c.beginPath();
+        var off = w - data.length;
+        for (var i = 0; i < data.length; i++) { var x = off + i, y = Yf(data[i]); if (i) c.lineTo(x, y); else c.moveTo(x, y); }
+        c.stroke(); c.restore();
+        c.font = "500 10.5px " + MONO; c.textBaseline = "top";
+        c.fillStyle = C.paper3; c.textAlign = "left"; c.fillText(names[L], 12, top + 9);
+        c.fillStyle = bad[L] ? C.alarm : C.paper; c.textAlign = "right"; c.font = "600 12px " + MONO; c.fillText(vtxt[L], w - 12, top + 8);
+      }
+    }
+
+    var loop = Loop(cv, function (dt) {
+      sampAcc += dt * RATE;
+      var n = Math.floor(sampAcc); sampAcc -= n;
+      for (var i = 0; i < n; i++) sample();
+      draw();
+    });
+    if (RM) { loop.paused = true; loop.stop(); }
+    ui(); draw();
+  })();
+
+  /* ================= stars ================= */
+  (function stars() {
+    var cv = $("star-sky"), ce = $("star-energy");
+    if (!cv) return;
+    var EPS2 = 0.0049, DT = 0.0015, PER_FRAME = 0.02, TRAIL = 240;
+    var preset = "triple", A, B, E0 = 0, t = 0, running = !RM, hist = [], view = 1.8, ejected = false;
+    var COLS = [C.chrome, C.cerulean, C.ochre];
+    var twinOn = $("star-twin"), runBtn = $("star-run"), msg = $("star-msg"), hint = $("star-hint"), presetG = $("star-preset");
+    var HINTS = { single: "Single star + planet", binary: "Binary · equal masses", triple: "Triple · 3 equal masses" };
+
+    function make(p) {
+      var b;
+      if (p === "single") b = [{ m: 1, x: 0, y: 0, vx: 0, vy: 0 }, { m: 0.004, x: 1.1, y: 0, vx: 0, vy: Math.sqrt(1 / 1.1) }];
+      else if (p === "binary") b = [{ m: 1, x: -0.5, y: 0, vx: 0, vy: -0.6 }, { m: 1, x: 0.5, y: 0, vx: 0, vy: 0.6 }];
+      else {
+        var d = 0.6, vb = Math.sqrt(1 / (2 * d)), r = 1.8, vr = Math.sqrt(3 / r) * 0.78;
+        b = [{ m: 1, x: -0.9, y: 0, vx: 0, vy: -vb - vr / 3 }, { m: 1, x: -0.3, y: 0, vx: 0, vy: vb - vr / 3 }, { m: 1, x: 1.2, y: 0, vx: 0, vy: 2 * vr / 3 }];
+      }
+      var M = 0, cx = 0, cy = 0, px = 0, py = 0;
+      b.forEach(function (q) { M += q.m; cx += q.m * q.x; cy += q.m * q.y; px += q.m * q.vx; py += q.m * q.vy; });
+      b.forEach(function (q) { q.x -= cx / M; q.y -= cy / M; q.vx -= px / M; q.vy -= py / M; q.trail = []; });
+      acc(b);
+      return b;
+    }
+    function acc(b) {
+      var i, j;
+      for (i = 0; i < b.length; i++) { b[i].ax = 0; b[i].ay = 0; }
+      for (i = 0; i < b.length; i++) for (j = i + 1; j < b.length; j++) {
+        var dx = b[j].x - b[i].x, dy = b[j].y - b[i].y, r2 = dx * dx + dy * dy + EPS2, inv = 1 / (r2 * Math.sqrt(r2));
+        b[i].ax += dx * inv * b[j].m; b[i].ay += dy * inv * b[j].m;
+        b[j].ax -= dx * inv * b[i].m; b[j].ay -= dy * inv * b[i].m;
+      }
+    }
+    function energy(b) {
+      var K = 0, U = 0, i, j;
+      for (i = 0; i < b.length; i++) K += 0.5 * b[i].m * (b[i].vx * b[i].vx + b[i].vy * b[i].vy);
+      for (i = 0; i < b.length; i++) for (j = i + 1; j < b.length; j++) {
+        var dx = b[j].x - b[i].x, dy = b[j].y - b[i].y;
+        U -= b[i].m * b[j].m / Math.sqrt(dx * dx + dy * dy + EPS2);
+      }
+      return { K: K, U: U, E: K + U };
+    }
+    function leap(b, h) {
+      var i;
+      for (i = 0; i < b.length; i++) { var q = b[i]; q.vx += 0.5 * h * q.ax; q.vy += 0.5 * h * q.ay; q.x += h * q.vx; q.y += h * q.vy; }
+      acc(b);
+      for (i = 0; i < b.length; i++) { b[i].vx += 0.5 * h * b[i].ax; b[i].vy += 0.5 * h * b[i].ay; }
+    }
+    function rmin(b) {
+      var m = 9;
+      for (var i = 0; i < b.length; i++) for (var j = i + 1; j < b.length; j++) m = Math.min(m, Math.hypot(b[i].x - b[j].x, b[i].y - b[j].y));
+      return m;
+    }
+    function restart() {
+      A = make(preset); B = make(preset);
+      B[B.length - 1].x += 0.001;
+      acc(B);
+      E0 = energy(A).E; t = 0; hist = []; ejected = false; view = preset === "single" ? 1.6 : 1.9;
+      msg.hidden = true; hint.textContent = HINTS[preset];
+      $("star-t").textContent = "0.0"; $("star-drift").textContent = "0.000%";
+      draw(); drawEnergy();
+    }
+    function advance(span) {
+      var left = span;
+      while (left > 1e-9) {
+        var r = Math.min(rmin(A), rmin(B));
+        var h = Math.min(left, DT * Math.max(0.03, Math.min(1, Math.pow(r / 0.35, 1.5))));
+        leap(A, h); leap(B, h); left -= h;
+      }
+      t += span;
+      [A, B].forEach(function (b) { b.forEach(function (q) { q.trail.push(q.x, q.y); if (q.trail.length > TRAIL * 2) q.trail.splice(0, 2); }); });
+      var e = energy(A);
+      hist.push(e); if (hist.length > 420) hist.shift();
+      var far = 0;
+      A.forEach(function (q) { far = Math.max(far, Math.hypot(q.x, q.y)); });
+      if (!ejected && preset === "triple" && far > 4.5) { ejected = true; msg.textContent = "A star was ejected. The other two stay bound."; msg.hidden = false; }
+      var bound = 0;
+      A.forEach(function (q) { var d = Math.hypot(q.x, q.y); if (d < 4.5) bound = Math.max(bound, d); });
+      view += (Math.max(preset === "single" ? 1.4 : 1.6, bound * 1.2) - view) * 0.02;
+      $("star-t").textContent = t.toFixed(1);
+      $("star-drift").textContent = (Math.abs((e.E - E0) / E0) * 100).toFixed(3) + "%";
+    }
+
+    var st = Stage(cv, function () { draw(); });
+    var stE = Stage(ce, function () { drawEnergy(); });
+
+    function draw() {
+      if (!A) return;
+      var c = st.ctx, w = st.w, h = st.h, cx = w / 2, cy = h / 2, sc = Math.min(w, h) / 2 / view;
+      c.fillStyle = C.ink2; c.fillRect(0, 0, w, h);
+      c.strokeStyle = rgba(C.rule, 0.6); c.lineWidth = 1; c.setLineDash([2, 6]);
+      c.beginPath(); c.moveTo(cx, 0); c.lineTo(cx, h); c.moveTo(0, cy); c.lineTo(w, cy); c.stroke(); c.setLineDash([]);
+      var groups = twinOn.checked ? [B, A] : [A];
+      groups.forEach(function (b) {
+        var ghost = b === B;
+        b.forEach(function (q, i) {
+          var tr = q.trail, n = tr.length / 2;
+          if (n > 1) {
+            var chunks = 4;
+            for (var k = 0; k < chunks; k++) {
+              var s0 = Math.floor(n * k / chunks), s1 = Math.floor(n * (k + 1) / chunks);
+              c.strokeStyle = rgba(COLS[i], (ghost ? 0.22 : 0.55) * (k + 1) / chunks);
+              c.lineWidth = ghost ? 1 : 1.6;
+              if (ghost) c.setLineDash([3, 4]);
+              c.beginPath();
+              for (var s = Math.max(0, s0 - 1); s < s1; s++) { var x = cx + tr[2 * s] * sc, y = cy + tr[2 * s + 1] * sc; if (s === Math.max(0, s0 - 1)) c.moveTo(x, y); else c.lineTo(x, y); }
+              c.stroke(); c.setLineDash([]);
+            }
+          }
+          var px = cx + q.x * sc, py = cy + q.y * sc, rad = q.m < 0.1 ? 3 : 6;
+          if (ghost) {
+            c.strokeStyle = rgba(COLS[i], 0.7); c.lineWidth = 1.3; c.beginPath(); c.arc(px, py, rad, 0, Math.PI * 2); c.stroke();
+          } else {
+            var g = c.createRadialGradient(px, py, 0, px, py, rad * 3.2);
+            g.addColorStop(0, rgba(COLS[i], 0.45)); g.addColorStop(1, rgba(COLS[i], 0));
+            c.fillStyle = g; c.beginPath(); c.arc(px, py, rad * 3.2, 0, Math.PI * 2); c.fill();
+            c.fillStyle = COLS[i]; c.beginPath(); c.arc(px, py, rad, 0, Math.PI * 2); c.fill();
+          }
+        });
+      });
+    }
+    function drawEnergy() {
+      var c = stE.ctx, w = stE.w, h = stE.h;
+      c.fillStyle = C.ink1; c.fillRect(0, 0, w, h);
+      if (!hist.length) {
+        c.fillStyle = C.paper3; c.font = "400 11px " + MONO; c.textAlign = "left"; c.textBaseline = "middle";
+        c.fillText("energy over time", 12, h / 2); return;
+      }
+      var lo = 0, hi = 0;
+      hist.forEach(function (e) { lo = Math.min(lo, e.U, e.E); hi = Math.max(hi, e.K, e.E); });
+      var pad = (hi - lo) * 0.1 || 0.1; lo -= pad; hi += pad;
+      var pL = 10, pR = 10;
+      function X(i) { return pL + (w - pL - pR) * i / 419; }
+      function Y(v) { return 8 + (h - 16) * (1 - (v - lo) / (hi - lo)); }
+      c.strokeStyle = rgba(C.rule, 0.9); c.lineWidth = 1; c.beginPath(); c.moveTo(pL, Math.round(Y(0)) + 0.5); c.lineTo(w - pR, Math.round(Y(0)) + 0.5); c.stroke();
+      [["K", C.cobalt, 1.3], ["U", C.ochre, 1.3], ["E", C.chrome, 2.4]].forEach(function (s) {
+        c.strokeStyle = s[1]; c.lineWidth = s[2]; c.beginPath();
+        hist.forEach(function (e, i) { var x = X(i), y = Y(e[s[0]]); if (i) c.lineTo(x, y); else c.moveTo(x, y); });
+        c.stroke();
+      });
+      c.fillStyle = C.paper3; c.font = "400 10px " + MONO; c.textAlign = "right"; c.textBaseline = "bottom";
+      c.fillText("0", w - 12, Y(0) - 2);
+    }
+
+    presetG.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      press(presetG, b); preset = b.dataset.p; restart();
+    });
+    twinOn.addEventListener("change", function () { draw(); });
+    runBtn.addEventListener("click", function () {
+      if (RM) { for (var i = 0; i < 60; i++) advance(PER_FRAME); draw(); drawEnergy(); return; }
+      running = !running; runBtn.textContent = running ? "Pause" : "Run";
+    });
+    $("star-restart").addEventListener("click", restart);
+    runBtn.textContent = RM ? "Step 1 s" : "Pause";
+
+    restart();
+    var loop = Loop(cv, function () {
+      if (running) advance(PER_FRAME);
+      draw(); drawEnergy();
+    });
+    if (RM) { loop.paused = true; loop.stop(); }
+  })();
+
+  /* ================= noise lamp ================= */
+  (function lamp() {
+    var inp = $("lamp-in"), el = $("lamp"), lvl = $("lamp-lvl"), meter = $("lamp-meter"), out = $("lamp-out");
+    if (!inp) return;
+    var live = +inp.value, shownLevel = -1;
+    var TXT = [["Quiet", "40 or below · lamp off"], ["Level 1", "40 to 70 · warning light"], ["Level 2", "over 70 · light + spoken warning"]];
+    function render(v) {
+      meter.style.width = clamp(v, 0, 100) + "%";
+      var L = v > 70 ? 2 : v > 40 ? 1 : 0;
+      if (L !== shownLevel) {
+        shownLevel = L;
+        el.className = "lamp l" + L;
+        lvl.innerHTML = TXT[L][0] + "<small>" + TXT[L][1] + "</small>";
+      }
+    }
+    inp.addEventListener("input", function () { out.textContent = inp.value; if (RM) { live = +inp.value; render(live); } });
+    render(live);
+    if (!RM) {
+      var noise = 0;
+      Loop(el.closest(".card"), function (dt) {
+        noise += (gauss() * 4 - noise) * 0.15;
+        live += ((+inp.value) + noise - live) * (1 - Math.pow(0.85, dt / 16));
+        render(live);
+      });
+    }
+  })();
+
+  /* ================= seat shuffler ================= */
+  (function seats() {
+    var box = $("seats");
+    if (!box) return;
+    var pos = [], els = [], round = 1;
+    function zone(seat) { var r = Math.floor(seat / 6), c = seat % 6; if (r === 0) return "front"; if (c === 0 || c === 5 || r === 5) return "side"; return "mid"; }
+    function place(i, animate) {
+      var seat = pos[i], r = Math.floor(seat / 6), c = seat % 6;
+      els[i].style.transitionDelay = animate ? (Math.random() * 160).toFixed(0) + "ms" : "0ms";
+      els[i].style.left = "calc(" + c + " * 100% / 6 + 3px)";
+      els[i].style.top = "calc(" + r + " * 100% / 6 + 3px)";
+    }
+    for (var i = 0; i < 36; i++) {
+      pos.push(i);
+      var d = document.createElement("div");
+      d.className = "seat z-" + zone(i);
+      d.textContent = String(i + 1);
+      d.setAttribute("aria-hidden", "true");
+      box.appendChild(d); els.push(d); place(i, false);
+    }
+    function shuffle(prev) {
+      for (var attempt = 0; attempt < 400; attempt++) {
+        var free = []; for (var s = 0; s < 36; s++) free.push(s);
+        var order = [];
+        for (var k = 0; k < 36; k++) order.push(k);
+        order.sort(function (a, b) {
+          var w = { side: 0, front: 1, mid: 2 };
+          return (w[zone(prev[a])] - w[zone(prev[b])]) || (Math.random() - 0.5);
+        });
+        var next = new Array(36), ok = true;
+        for (var j = 0; j < 36; j++) {
+          var st = order[j], z = zone(prev[st]);
+          var cand = free.filter(function (seat) {
+            if (seat === prev[st]) return false;
+            if (z === "front" && zone(seat) === "front") return false;
+            if (z === "side" && zone(seat) === "side") return false;
+            return true;
+          });
+          if (!cand.length) { ok = false; break; }
+          var pick = cand[Math.floor(Math.random() * cand.length)];
+          next[st] = pick; free.splice(free.indexOf(pick), 1);
+        }
+        if (ok) return next;
+      }
+      return null;
+    }
+    $("seats-go").addEventListener("click", function () {
+      var prev = pos.slice(), next = shuffle(prev);
+      if (!next) return;
+      pos = next; round++;
+      for (var i = 0; i < 36; i++) { els[i].className = "seat z-" + zone(prev[i]); place(i, !RM); }
+      var c1 = true, c2 = true, c3 = true;
+      for (var j = 0; j < 36; j++) {
+        if (pos[j] === prev[j]) c1 = false;
+        if (zone(prev[j]) === "front" && zone(pos[j]) === "front") c2 = false;
+        if (zone(prev[j]) === "side" && zone(pos[j]) === "side") c3 = false;
+      }
+      var li = $("seats-checks").querySelectorAll("li");
+      li[0].classList.toggle("ok", c1); li[1].classList.toggle("ok", c2); li[2].classList.toggle("ok", c3);
+      $("seats-round").textContent = "Round " + round;
+    });
+  })();
+
+  /* ================= roller coaster ================= */
+  (function coaster() {
+    var cv = $("coaster"), sp = $("speeds");
+    if (!cv) return;
+    var X0 = 0, X1 = 44, Y1 = 33, CREST = 14, NC = 6, GAP = 2.3, g = 9.8;
+    function hgt(x) { return 16 + 14 * Math.cos(Math.PI * (x - CREST) / 26); }
+    var xs = [], ss = [], acc = 0;
+    for (var x = X0; x <= X1 + 1e-9; x += 0.02) {
+      if (xs.length) { var px = xs[xs.length - 1]; acc += Math.hypot(x - px, hgt(x) - hgt(px)); }
+      xs.push(x); ss.push(acc);
+    }
+    function xAt(s) {
+      if (s <= 0) return X0;
+      if (s >= ss[ss.length - 1]) return X1;
+      var lo = 0, hi = ss.length - 1;
+      while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (ss[mid] < s) lo = mid; else hi = mid; }
+      var t = (s - ss[lo]) / (ss[hi] - ss[lo]);
+      return lerp(xs[lo], xs[hi], t);
+    }
+    function hcom(sf) { var hsum = 0; for (var k = 0; k < NC; k++) hsum += hgt(xAt(sf - k * GAP)); return hsum / NC; }
+    var sStart = 0;
+    for (var i = 0; i < ss.length; i++) if (xs[i] >= 10.5) { sStart = ss[i]; break; }
+    // The lift chain holds the train at a crawl until its center of mass passes the top; then gravity takes over.
+    var hMax = 0, sPeak = sStart, sEnd = 0, V_CHAIN = 1.5, BARMAX = 8;
+    for (var s = sStart; s < ss[ss.length - 1]; s += 0.05) { var hc = hcom(s); if (hc > hMax) { hMax = hc; sPeak = s; } }
+    for (i = 0; i < ss.length; i++) if (xs[i] >= 42.5) { sEnd = ss[i]; break; }
+    function speed(sf) { return sf < sPeak ? V_CHAIN : Math.sqrt(V_CHAIN * V_CHAIN + 2 * g * (hMax - hcom(sf))); }
+
+    var sf = sStart, rec = [], hold = 0, playing = !RM;
+    for (i = 0; i < NC; i++) {
+      var d = document.createElement("div");
+      d.innerHTML = '<b>&ndash;</b><span></span>' + (i === 0 ? "front" : i === NC - 1 ? "back" : String(i + 1));
+      sp.appendChild(d);
+    }
+    var cells = sp.querySelectorAll("div");
+    function resetRun(clearBars) {
+      sf = sStart; rec = []; hold = 0;
+      if (clearBars) cells.forEach(function (cel) { cel.querySelector("b").innerHTML = "&ndash;"; var bar = cel.querySelector("span"); bar.style.height = "2px"; bar.classList.remove("set"); });
+    }
+    var st = Stage(cv, function () { draw(); });
+
+    function step(dt) {
+      if (hold > 0) { hold -= dt; if (hold <= 0) resetRun(false); return; }
+      var v = speed(sf), before = [];
+      for (var k = 0; k < NC; k++) before.push(xAt(sf - k * GAP));
+      sf += v * dt / 1000 * 1.5;
+      for (k = 0; k < NC; k++) {
+        var xa = xAt(sf - k * GAP);
+        if (before[k] < CREST && xa >= CREST && rec[k] === undefined) {
+          rec[k] = v;
+          var cel = cells[k];
+          cel.querySelector("b").textContent = v.toFixed(1);
+          var bar = cel.querySelector("span"); bar.style.height = Math.min(52, Math.max(4, v / BARMAX * 52)) + "px"; bar.classList.add("set");
+        }
+      }
+      if (sf >= sEnd && hold <= 0) hold = playing ? 3200 : 0;
+    }
+    function draw() {
+      var c = st.ctx, w = st.w, h = st.h, pad = 14;
+      function PX(x) { return pad + (w - 2 * pad) * (x - X0) / (X1 - X0); }
+      function PY(y) { return h - 16 - (h - 34) * y / Y1; }
+      c.fillStyle = C.ink2; c.fillRect(0, 0, w, h);
+      c.strokeStyle = rgba(C.rule, 0.8); c.lineWidth = 1;
+      for (var x = 1; x < X1; x += 3) { c.beginPath(); c.moveTo(PX(x), PY(hgt(x))); c.lineTo(PX(x), h - 16); c.stroke(); }
+      c.strokeStyle = C.paper3; c.beginPath(); c.moveTo(0, h - 15.5); c.lineTo(w, h - 15.5); c.stroke();
+      c.strokeStyle = C.paper2; c.lineWidth = 3; c.beginPath();
+      for (x = X0; x <= X1; x += 0.25) { if (x === X0) c.moveTo(PX(x), PY(hgt(x))); else c.lineTo(PX(x), PY(hgt(x))); }
+      c.stroke();
+      c.setLineDash([3, 4]); c.strokeStyle = rgba(C.chrome, 0.6); c.lineWidth = 1;
+      c.beginPath(); c.moveTo(PX(CREST), PY(hgt(CREST)) - 26); c.lineTo(PX(CREST), PY(hgt(CREST)) + 6); c.stroke(); c.setLineDash([]);
+      c.fillStyle = C.chrome; c.font = "500 10px " + MONO; c.textAlign = "center"; c.fillText("top", PX(CREST), PY(hgt(CREST)) - 30);
+      for (var k = NC - 1; k >= 0; k--) {
+        var xa = xAt(sf - k * GAP), ya = hgt(xa), slope = Math.atan2(-(hgt(xa + 0.05) - hgt(xa - 0.05)) * (h - 34) / Y1, 0.1 * (w - 2 * pad) / (X1 - X0));
+        c.save(); c.translate(PX(xa), PY(ya)); c.rotate(slope);
+        c.fillStyle = k === NC - 1 ? C.chrome : k === 0 ? C.cerulean : C.cobalt;
+        c.beginPath(); c.roundRect ? c.roundRect(-9, -13, 18, 10, 3) : c.rect(-9, -13, 18, 10); c.fill();
+        c.restore();
+      }
+      c.fillStyle = C.paper2; c.font = "500 11px " + MONO; c.textAlign = "left";
+      c.fillText(speed(sf).toFixed(1) + " m/s", 12, 18);
+    }
+    $("coaster-go").addEventListener("click", function () {
+      resetRun(true);
+      if (RM) { var guard = 0; while (sf < sEnd && guard++ < 4000) step(16); draw(); }
+    });
+    var loop = Loop(cv, function (dt) { step(dt); draw(); });
+    if (RM) { loop.paused = true; loop.stop(); var guard = 0; while (sf < sEnd && guard++ < 4000) step(16); draw(); }
+  })();
+
+  /* ================= molecule ================= */
+  (function molecule() {
+    var cv = $("molecule");
+    if (!cv) return;
+    var atoms = [], bonds = [];
+    for (var i = 0; i < 6; i++) {
+      var a = i * Math.PI / 3;
+      atoms.push({ x: 1.39 * Math.cos(a), y: 1.39 * Math.sin(a), z: 0, el: "C" });
+    }
+    for (i = 0; i < 6; i++) {
+      var b = i * Math.PI / 3;
+      atoms.push({ x: 2.48 * Math.cos(b), y: 2.48 * Math.sin(b), z: 0, el: "H" });
+      bonds.push([i, (i + 1) % 6, i % 2 === 0 ? 2 : 1]);
+      bonds.push([i, i + 6, 1]);
+    }
+    var rx = 0.9, ry = 0.3, drag = null;
+    var st = Stage(cv, function () { draw(); });
+    function proj(p, w, h) {
+      var cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
+      var x1 = p.x * cy + p.z * sy, z1 = -p.x * sy + p.z * cy;
+      var y2 = p.y * cx - z1 * sx, z2 = p.y * sx + z1 * cx;
+      var u = Math.min(w, h) / 6.6, s = 7 / (7 + z2);
+      return { x: w / 2 + x1 * u * s, y: h / 2 + y2 * u * s, z: z2, s: s, u: u };
+    }
+    function draw() {
+      var c = st.ctx, w = st.w, h = st.h;
+      c.fillStyle = C.ink2; c.fillRect(0, 0, w, h);
+      var P = atoms.map(function (a) { return proj(a, w, h); });
+      c.lineCap = "round";
+      bonds.forEach(function (bd) {
+        var p = P[bd[0]], q = P[bd[1]];
+        c.strokeStyle = C.paper3; c.lineWidth = 3.2 * (p.s + q.s) / 2;
+        if (bd[2] === 2) {
+          var dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx, dy) || 1, ox = -dy / L * 3.2, oy = dx / L * 3.2;
+          c.lineWidth = 2.2;
+          c.beginPath(); c.moveTo(p.x + ox, p.y + oy); c.lineTo(q.x + ox, q.y + oy); c.stroke();
+          c.beginPath(); c.moveTo(p.x - ox, p.y - oy); c.lineTo(q.x - ox, q.y - oy); c.stroke();
+        } else { c.beginPath(); c.moveTo(p.x, p.y); c.lineTo(q.x, q.y); c.stroke(); }
+      });
+      var order = P.map(function (p, i) { return i; }).sort(function (a, b) { return P[b].z - P[a].z; });
+      order.forEach(function (i) {
+        var p = P[i], isC = atoms[i].el === "C", r = (isC ? 0.36 : 0.24) * p.u * p.s;
+        var g = c.createRadialGradient(p.x - r * 0.35, p.y - r * 0.35, r * 0.1, p.x, p.y, r);
+        g.addColorStop(0, isC ? C.paper : "#ffffff"); g.addColorStop(1, isC ? C.paper3 : C.paper2);
+        c.fillStyle = g; c.beginPath(); c.arc(p.x, p.y, r, 0, Math.PI * 2); c.fill();
+      });
+    }
+    cv.addEventListener("pointerdown", function (e) { drag = { x: e.clientX, y: e.clientY }; try { cv.setPointerCapture(e.pointerId); } catch (err) {} });
+    cv.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      ry += (e.clientX - drag.x) * 0.01; rx += (e.clientY - drag.y) * 0.01;
+      drag = { x: e.clientX, y: e.clientY }; if (RM) draw();
+    });
+    function up() { drag = null; }
+    cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+    var loop = Loop(cv, function (dt) { if (!drag) ry += 0.0005 * dt; draw(); });
+    if (RM) { loop.paused = true; loop.stop(); draw(); }
+  })();
+
+  /* ================= Edu Pointer concept ================= */
+  (function edu() {
+    var box = $("edu");
+    if (!box) return;
+    var steps = box.querySelectorAll(".step"), bars = box.querySelectorAll(".steps i");
+    var guide = $("edu-guide"), gt = $("edu-guide-txt"), count = $("edu-count"), sol = $("edu-solution"), lock = $("edu-lock");
+    function show(n) {
+      steps.forEach(function (s) { s.hidden = +s.dataset.step !== n; });
+      bars.forEach(function (b, i) { b.className = i < n - 1 ? "done" : i === n - 1 ? "now" : ""; });
+      count.textContent = "Step " + n + " of 3";
+      guide.hidden = true;
+      var first = box.querySelector('.step[data-step="' + n + '"] input');
+      if (first && n > 1) first.focus({ preventScroll: true });
+    }
+    function hint(t) { gt.textContent = t; guide.hidden = false; }
+    box.querySelectorAll(".choices button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.dataset.ok === "1") { b.className = "yes"; setTimeout(function () { show(2); }, 450); }
+        else { b.className = "no"; hint("A square is never negative. Which form has a square in it that you could set to zero?"); }
+      });
+    });
+    function num(id) { return parseFloat(($(id).value || "").replace("−", "-")); }
+    function check2() {
+      var p = num("edu-p"), q = num("edu-q");
+      if (p === 3 && q === 2) { show(3); return; }
+      if (p !== 3) hint("Half of −6 is −3, so x² − 6x is part of (x − 3)². What number goes in the first box?");
+      else hint("(x − 3)² = x² − 6x + 9. You need 11 in total. How much is left over?");
+    }
+    function check3() {
+      var m = num("edu-m"), x = num("edu-x");
+      if (m === 2 && x === 3) {
+        bars.forEach(function (b) { b.className = "done"; });
+        count.textContent = "Solved";
+        guide.hidden = true; sol.hidden = false; lock.textContent = "✓ Full solution unlocked";
+        return;
+      }
+      hint("(x − 3)² is smallest when it equals 0. Which x makes that happen, and what's left?");
+    }
+    $("edu-check2").addEventListener("click", check2);
+    $("edu-check3").addEventListener("click", check3);
+    ["edu-p", "edu-q"].forEach(function (id) { $(id).addEventListener("keydown", function (e) { if (e.key === "Enter") check2(); }); });
+    ["edu-m", "edu-x"].forEach(function (id) { $(id).addEventListener("keydown", function (e) { if (e.key === "Enter") check3(); }); });
+    $("edu-reset").addEventListener("click", function () {
+      box.querySelectorAll("input").forEach(function (i) { i.value = ""; });
+      box.querySelectorAll(".choices button").forEach(function (b) { b.className = ""; });
+      sol.hidden = true; lock.textContent = "🔒 Full solution unlocks after step 3";
+      show(1);
+    });
+  })();
 })();
 </script>
+
 </body>
 </html>
